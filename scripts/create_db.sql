@@ -29,19 +29,22 @@ token : pseudo, email
 
 */
 
+
+--Story 1 : En tant que « nouveau », je peux créer mon compte
 CREATE TABLE users( -- table of users in the application, the token is here for the security and manage the connection on the front
    email                   TEXT PRIMARY KEY  NOT NULL,
-   pseudo                  TEXT              NOT NULL,
-   password                TEXT              NOT NULL,
-   name                    TEXT              NOT NULL,
-   surname                 TEXT              NOT NULL,
+   pseudo                  TEXT              NOT NULL,--Story 2 ""
+   password                TEXT              NOT NULL,--Story 2 : En tant que « nouveau », si je dispose d’un compte, je peux me connecter
+   name                    TEXT              ,
+   surname                 TEXT              ,
    userRole                TEXT              NOT NULL,--énumération : nouveau, étudiant, professeur, administrateur
-   token                   TEXT              NOT NULL
+   token                   TEXT               --Story 5 : En tant que « utilisateur », je peux demander la validation de mon token.
 );
-
+--Story 3 : En tant que « nouveau », je peux demander une élévation de privilège afin de devenir « étudiant » ou « professeur »
 CREATE TABLE assignmentRequest( --allows administrators to see request and to accept an assignment
    emailUserForAssignment       TEXT NOT NULL,
    roleRequest                  TEXT NOT NULL,
    dateOfRequest                TEXT NOT NULL, --https://www.sqlite.org/datatype3.html 2.2. Date and Time Datatype => TEXT as ISO8601 strings ("YYYY-MM-DD HH:MM:SS.SSS"). 
+   accepted                     BOOLEAN DEFAULT FALSE, --Story 4 : En tant que « administrateur », je accepter ou refuser une élévation de privilège.
    FOREIGN KEY(emailUserForAssignment) REFERENCES users(email)
 );
