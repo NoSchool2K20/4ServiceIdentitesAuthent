@@ -1,9 +1,10 @@
-/*CREATE TABLE todos(
+CREATE TABLE todos(
    ID VARCHAR(32) PRIMARY KEY NOT NULL,
    DESCRIPTION    TEXT    NOT NULL,
    COMPLETED      BOOLEAN DEFAULT FALSE
 );
 
+/*
 ******************* Prise de notes du mardi 11 février à 16h45 :
 --créer une base postregresql (local et en ligne)
 --2 gits : un repo fronto et un backo
@@ -31,7 +32,7 @@ token : pseudo, email
 
 
 --Story 1 : En tant que « nouveau », je peux créer mon compte
-CREATE TABLE users( -- table of users in the application, the token is here for the security and manage the connection on the front
+/*CREATE TABLE users( -- table of users in the application, the token is here for the security and manage the connection on the front
    email                   TEXT PRIMARY KEY  NOT NULL,
    pseudo                  TEXT              NOT NULL,--Story 2 ""
    password                TEXT              NOT NULL,--Story 2 : En tant que « nouveau », si je dispose d’un compte, je peux me connecter
@@ -41,7 +42,7 @@ CREATE TABLE users( -- table of users in the application, the token is here for 
    token                   TEXT               --Story 5 : En tant que « utilisateur », je peux demander la validation de mon token. 
    --RG 1 : Le process d’authentification se base sur la mise en place de token JWT signés et expirant à leur date d’émission + 3 jours
    --RG 2 : Le secret JWT peut être partagé avec les backend le nécessitant tant qu’ils sont hébergé sur le même compte clever-cloud grâce à un add on « Configuration provider »
-);
+);*/
 --Story 3 : En tant que « nouveau », je peux demander une élévation de privilège afin de devenir « étudiant » ou « professeur »
 --RG 4 : Lorsqu’un nouveau compte est créé, un évènement est créé sur un channel RabbitMQ 
 --RG 5 : Lorsqu’une demande d’élévation de privilège est réalisée, un évènement est créé sur un channel RabbitMQ.
