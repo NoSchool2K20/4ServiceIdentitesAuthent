@@ -1,0 +1,34 @@
+{
+  "name": "yata",
+  "version": "1.0.0",
+  "description": "Yet Another Todo is a sample ToDo backend API built with ReasonML and Buckelscript",
+  "main": "src/index.bs.js",
+  "scripts": {
+    "bsb:build": "bsb -make-world",
+    "dev": "concurrently -c magenta,cyan \"npm:bsb:watch\" \"npm:server\"",
+    "bsb:watch": "bsb -make-world -w -ws _ ",
+    "bsb:clean": "bsb -clean-world",
+    "build": "npm run bsb:build",
+    "server": "LEVEL=debug nodemon src/index.bs.js",
+    "start": "node src/index.bs.js",
+    "db:create": "cat scripts/create_db.sql | sqlite3 ./database/yatdb.sqlite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@glennsl/bs-json": "^5.0.2",
+    "bs-express": "^1.0.1",
+    "bs-knex": "^3.1.0",
+    "bs-winston": "^0.6.1",
+    "compression": "^1.7.4",
+    "helmet": "^3.22.0",
+    "sqlite3": "^4.1.1",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "bs-platform": "^7.2.2",
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
