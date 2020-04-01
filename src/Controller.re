@@ -5,10 +5,10 @@ module Users = {
     PromiseMiddleware.from((_next, req, rep) => {
       let queryDict = Request.query(req);
       (
-        switch (queryDict->Js.Dict.get("completed")) {//TODO voir comment adapter ?
+        switch (queryDict->Js.Dict.get("userRole")) {//TODO voir comment adapter ?
         | Some(c) =>
           switch (c |> Json.Decode.string |> bool_of_string_opt) {
-          | Some(cfilter) => DataAccess.Users.getByCompletness(cfilter)
+          | Some(cfilter) => DataAccess.Users.getByUserRole(cfilter)
           | None => DataAccess.Users.getAll()
           }
         | None => DataAccess.Users.getAll()
@@ -54,7 +54,12 @@ module Users = {
             | None => reject(Failure("INVALID email"))
             | Some(reqJson) =>
               switch (
-                reqJson |> Json.Decode.(field("email", optional(string))),
+                reqJson |> Json.Decode.(field("pseudo", optional(string))),
+                reqJson |> Json.Decode.(field("password", optional(string))),
+                reqJson |> Json.Decode.(field("name", optional(string))),
+                reqJson |> Json.Decode.(field("surname", optional(string))),
+                reqJson |> Json.Decode.(field("userRole", optional(string))),
+                reqJson |> Json.Decode.(field("token", optional(string))),
               ) {   //email, pseudo, password, name, surname, userRole, token
               | exception e => reject(e)
               | (Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) =>
@@ -101,6 +106,19 @@ module Users = {
       )
     );
 
+    /*
+
+    curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"email\": \"thomas@test.com\",
+        \"pseudo\": \"Gotyge\",
+        \"password\": \"momdp\",
+        \"name\": \"AUGUET\",
+        \"surname\": \"Thomas\",
+        \"userRole\": \"Administrateur\",
+        \"token\": \"montoken\" 
+      }" http://127.0.0.1:8080/users
+
+    */
   let create =
     PromiseMiddleware.from((_next, req, rep) =>
       Js.Promise.(
@@ -109,12 +127,18 @@ module Users = {
           | None => reject(Failure("INVALID REQUEST"))
           | Some(reqJson) =>
             switch (
-              reqJson |> Json.Decode.(field("email", optional(string)))
+              reqJson |> Json.Decode.(field("email", optional(string))),
+              reqJson |> Json.Decode.(field("pseudo", optional(string))),
+              reqJson |> Json.Decode.(field("password", optional(string))),
+              reqJson |> Json.Decode.(field("name", optional(string))),
+              reqJson |> Json.Decode.(field("surname", optional(string))),
+              reqJson |> Json.Decode.(field("userRole", optional(string))),
+              reqJson |> Json.Decode.(field("token", optional(string))),
             ) {
             | exception e => reject(e)
-            | None => reject(Failure("INVALID email"))
             | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) => 
                 DataAccess.Users.create(email, pseudo, password, name, surname, userRole, token)
+            | _ => reject(Failure("Manque de données"))
             }
           }
         )

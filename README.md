@@ -19,12 +19,35 @@ Test it :
 ```sh
 curl http://127.0.0.1:8080
 
-curl http://127.0.0.1:8080/todos
-curl http://127.0.0.1:8080/todos?completed=true
-curl http://127.0.0.1:8080/todos?completed=false
-
-curl -X POST -H "Content-Type: application/json" -d "{ \"MESSAGE\": \"value1\" }" http://127.0.0.1:8080/todos
-
+curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"email\": \"thomas@test.com\",
+        \"pseudo\": \"Gotyge\",
+        \"password\": \"momdp\",
+        \"name\": \"AUGUET\",
+        \"surname\": \"Thomas\",
+        \"userRole\": \"Administrateur\",
+        \"token\": \"montoken\" 
+      }" http://127.0.0.1:8080/users
+      
+curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"email\": \"chris@test.com\",
+        \"pseudo\": \"Wello\",
+        \"password\": \"momdp\",
+        \"name\": \"DUCROCQ\",
+        \"surname\": \"Christopher\",
+        \"userRole\": \"Etudiant\",
+        \"token\": \"sontoken\" 
+      }" http://127.0.0.1:8080/users
+      
 # replace :id by a real id
-curl -X PUT -H "Content-Type: application/json" -d "{ \"MESSAGE\": \"value1\", \"COMPLETED\": true }" http://127.0.0.1:8080/todos/:id
-```
+curl -X PUT -H "Content-Type: application/json" -d "{ 
+        \"pseudo\": \"GotygeModifie\",
+        \"password\": \"momdp\",
+        \"name\": \"AUGUET\",
+        \"surname\": \"Thomas\",
+        \"userRole\": \"Administrateur\",
+        \"token\": \"montoken\" 
+      }" http://127.0.0.1:8080/users/thomas@test.com
+      
+curl http://127.0.0.1:8080/users
+curl http://127.0.0.1:8080/users/thomas@test.com

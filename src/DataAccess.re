@@ -42,10 +42,11 @@ module Users = {
          })
     );
 
-  let getByCompletness = cfilter =>
+  let getByUserRole = userRole =>
     Js.Promise.(
       knex
       |> Knex.fromTable("users")
+      |> Knex.where({"userRole": userRole})
       |> Knex.toPromise
       |> then_(results => {
            Model.Users.fromJson(results)
@@ -60,7 +61,6 @@ module Users = {
                   Model.User.getToken(user),
                 )
               })
-           |> Model.Users.filterByCompletness(cfilter)  // to vary composition exemple, WHERE clause is better
            |> Model.Users.toJson
            |> resolve
          })
@@ -76,7 +76,7 @@ module Users = {
         |> then_(results => {
              Model.Users.fromJson(results)
              |> List.map(user => {
-                  Model.Todo.make(
+                  Model.User.make(
                     Model.User.getEmail(user),
                     Model.User.getPseudo(user),
                     Model.User.getPassword(user),
@@ -120,7 +120,7 @@ module Users = {
   };
 
   let create = (email, pseudo, password, name, surname, userRole, token) => {
-    let todo = Model.User.makeNew(email, pseudo, password, name, surname, userRole, token);
+    let user = Model.User.make(email, pseudo, password, name, surname, userRole, token);
     Js.Promise.(
       knex
       |> Knex.rawBinding(

@@ -45,13 +45,13 @@ module User: {
   //let bool_of_int = value => value === 1;
   let fromJson = json =>
     Json.Decode.{
-      email: json |> field("EMAIL", string),
-      pseudo: json |> field("PSEUDO", string),
-      password: json |> field("PASSWORD", string),
-      name: json |> field("NAME", string),
-      surname: json |> field("SURNAME", string),
-      userRole: json |> field("USERROLE", string),
-      token: json |> field("TOKEN", string),
+      email: json |> field("email", string),
+      pseudo: json |> field("pseudo", string),
+      password: json |> field("password", string),
+      name: json |> field("name", string),
+      surname: json |> field("surname", string),
+      userRole: json |> field("userRole", string),
+      token: json |> field("token", string),
     };
 
   let fromString = jsonString =>
@@ -67,7 +67,7 @@ module User: {
       object_([
         ("email", string(user.email)),
         ("pseudo", string(user.pseudo)),
-        ("password", string(user.pseudo)),//maybe we could not show password in jsonEncode ?
+        ("password", string(user.password)),//maybe we could not show password in jsonEncode ?
         ("name", string(user.name)),
         ("surname", string(user.surname)),
         ("userRole", string(user.userRole)),
@@ -89,34 +89,40 @@ module Users: {
   type t = list(User.t);
 
   /*let filterBy:
-    (~description: option(string), ~completed: option(bool), t) => t =
-    (~description, ~completed, todos) => {
+    (~userRole: option(string),~pseudo: option(string), t) => t =
+    (~userRole,~pseudo, users) => {
       let descFiltered =
-        switch (description) {
-        | None => todos
-        | Some(desc) =>
-          List.filter(
-            item =>
-              // Use Js.String her because Buckelscript do not include Pervasive.Str from reason
-              // Simplify string manipulation without Str module avalaible
-              Js.String.(
-                includes(make(desc), make(Todo.getDescription(item)))
-              ),
-            todos,
-          )
-        };
-
-      switch (completed) {
+      switch (userRole) {
+      | None => users
+      | Some(userRole) =>
+        List.filter(
+          item =>
+            // Use Js.String her because Buckelscript do not include Pervasive.Str from reason
+            // Simplify string manipulation without Str module avalaible
+            Js.String.(
+              includes(make(userRole), make(User.getUserRole(item)))
+            ),
+          users,
+        )
+      };
+      switch (pseudo) {
       | None => descFiltered
-      | Some(b) =>
-        List.filter(item => Todo.isCompleted(item) === b, descFiltered)
+      | Some(pseudo) =>
+        List.filter(
+          item =>
+            // Use Js.String her because Buckelscript do not include Pervasive.Str from reason
+            // Simplify string manipulation without Str module avalaible
+            Js.String.(
+              includes(make(pseudo), make(User.getPseudo(item)))
+            ),
+          users,
+        )
       };
     };
 
-  let filterByDescription = description =>
-    filterBy(~description=Some(description), ~completed=None);
-  let filterByCompletness = completed =>
-    filterBy(~description=None, ~completed=Some(completed));*/
+    
+  let filterByUserRole = userRole =>
+  filterBy(~userRole=Some(userRole), ~pseudo=None);*/
 
   let fromJson: Js.Json.t => t =
     json => json |> Json.Decode.(list(User.fromJson));
