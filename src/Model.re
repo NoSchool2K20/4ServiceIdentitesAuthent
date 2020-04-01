@@ -1,52 +1,57 @@
-[@bs.module "uuid"] external uuidv4: unit => string = "v4";
-
-module Todo: {
+module User: {
   type t; // this is an abastraction to enforce creation with make functions
-  let make: (string, string, bool) => t;
-  let makeNew: string => t;
-  let modifyDescription: (string, t) => t;
-  let complete: t => t;
-  let uncomplete: t => t;
-  let getId: t => string;
-  let getDescription: t => string;
-  let isCompleted: t => bool;
+  let make: (string, string, string, string, string, string, string) => t;
+  let modifyUserRole: (string, t) => t;
+  let getEmail: t => string;
+  let getPseudo: t => string;
+  let getPassword: t => string;
+  let getName: t => string;
+  let getSurname: t => string;
+  let getUserRole: t => string;
+  let getToken: t => string;
+  let isAdmin: t => bool;//allow to know if assignment request could be accepted by this user
   let fromJson: Js.Json.t => t;
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
   let toString: t => string;
 } = {
   type t = {
-    id: string,
-    description: string,
-    completed: bool,
+    email: string,
+    pseudo: string,
+    password: string,
+    name: string,
+    surname: string,
+    userRole: string,
+    token: string,
   };
 
-  // create a value of the type Todo.t
-  let make = (id, description, completed) => {id, description, completed};
-  let makeNew = description => make(uuidv4(), description, false);
+  // create a value of the type Users.t
+  let make = (email, pseudo, password, name, surname, userRole, token) => {email, pseudo, password, name, surname, userRole, token};
+
+  // Setters
+  let modifyUserRole = (newUserRole, user) => {...user, userRole: newUserRole};
 
   // Getters are mandatory because of abstraction,
   // while it is a good practice for accessing records members, like for object members
-  let getId = todo => todo.id;
-  let getDescription = todo => todo.description;
-  let isCompleted = todo => todo.completed;
+  let getEmail = user => user.email;
+  let getPseudo = user => user.pseudo;
+  let getPassword = user => user.password;
+  let getName = user => user.name;
+  let getSurname = user => user.surname;
+  let getUserRole = user => user.userRole;
+  let getToken = user => user.token;
+  let isAdmin = user => user.userRole=="Administrateur";
 
-  // Setters
-  let modifyDescription = (newDesc, todo) => {...todo, description: newDesc};
-  let complete = todo => {
-    {...todo, completed: true};
-  };
-  let uncomplete = todo => {
-    {...todo, completed: false};
-  };
-
-  /* utility fonction for boolean repesented as 0 / 1 */
-  let bool_of_int = value => value === 1;
+  //let bool_of_int = value => value === 1;
   let fromJson = json =>
     Json.Decode.{
-      id: json |> field("ID", string),
-      description: json |> field("DESCRIPTION", string),
-      completed: json |> field("COMPLETED", int) |> bool_of_int,
+      email: json |> field("EMAIL", string),
+      pseudo: json |> field("PSEUDO", string),
+      password: json |> field("PASSWORD", string),
+      name: json |> field("NAME", string),
+      surname: json |> field("SURNAME", string),
+      userRole: json |> field("USERROLE", string),
+      token: json |> field("TOKEN", string),
     };
 
   let fromString = jsonString =>
@@ -55,31 +60,35 @@ module Todo: {
     | None => None
     };
 
-  let toJson = todo =>
+  let toJson = user =>
     // Json module comes from bs-json, it is not Js.Json module
     // Use of bs-json to encode json in expressive way while you can use Js.Json / Js.Dict in an imperative way
     Json.Encode.(
       object_([
-        ("id", string(todo.id)),
-        ("description", string(todo.description)),
-        ("completed", bool(todo.completed)),
+        ("email", string(user.email)),
+        ("pseudo", string(user.pseudo)),
+        ("password", string(user.pseudo)),//maybe we could not show password in jsonEncode ?
+        ("name", string(user.name)),
+        ("surname", string(user.surname)),
+        ("userRole", string(user.userRole)),
+        ("token", string(user.token)),
       ])
     );
-  let toString = todo => toJson(todo) |> Js.Json.stringify;
+  let toString = user => toJson(user) |> Js.Json.stringify;
 };
 
-module Todos: {
-  type t = list(Todo.t); // do not overuse abstraction when unecessary
-  let filterByDescription: (string, t) => t;
-  let filterByCompletness: (bool, t) => t;
+module Users: {
+  type t = list(User.t); // do not overuse abstraction when unecessary
+  /*let filterByDescription: (string, t) => t;
+  let filterByCompletness: (bool, t) => t;*/
   let fromJson: Js.Json.t => t;
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
   let toString: t => string;
 } = {
-  type t = list(Todo.t);
+  type t = list(User.t);
 
-  let filterBy:
+  /*let filterBy:
     (~description: option(string), ~completed: option(bool), t) => t =
     (~description, ~completed, todos) => {
       let descFiltered =
@@ -107,10 +116,10 @@ module Todos: {
   let filterByDescription = description =>
     filterBy(~description=Some(description), ~completed=None);
   let filterByCompletness = completed =>
-    filterBy(~description=None, ~completed=Some(completed));
+    filterBy(~description=None, ~completed=Some(completed));*/
 
   let fromJson: Js.Json.t => t =
-    json => json |> Json.Decode.(list(Todo.fromJson));
+    json => json |> Json.Decode.(list(User.fromJson));
 
   let fromString = jsonString =>
     switch (Json.parse(jsonString)) {
@@ -118,9 +127,9 @@ module Todos: {
     | None => None
     };
 
-  let toJson = todos =>
-    Array.of_list(todos)  // convert list(Todo.t) to array(Todo.t)
-    |> Array.map(item => Todo.toJson(item))  // create an array(Js.Json.t)
+  let toJson = users =>
+    Array.of_list(users)  // convert list(User.t) to array(User.t)
+    |> Array.map(item => User.toJson(item))  // create an array(Js.Json.t)
     |> Json.Encode.jsonArray;
-  let toString = todos => toJson(todos) |> Js.Json.stringify;
+  let toString = users => toJson(users) |> Js.Json.stringify;
 };

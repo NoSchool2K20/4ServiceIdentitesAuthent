@@ -23,10 +23,10 @@ App.use(app, Controller.logRequest);
 // SETUP ROUTES
 App.get(app, ~path="/", Controller.welcome);
 
-App.get(app, ~path="/todos", Controller.Todos.getAll);
-App.get(app, ~path="/todos/:id", Controller.Todos.get);
+App.get(app, ~path="/users", Controller.Users.getAll);
+App.get(app, ~path="/users/:email", Controller.Users.get);
 
-App.post(app, ~path="/todos", Controller.Todos.create);
-App.put(app, ~path="/todos/:id", Controller.Todos.update);
+App.post(app, ~path="/users", Controller.Users.create);
+App.put(app, ~path="/users/:email", Controller.Users.update);
 
 App.useOnPath(app, ~path="*", Controller.badRessource);

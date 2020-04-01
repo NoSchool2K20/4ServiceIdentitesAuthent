@@ -18,22 +18,26 @@ let config =
 
 let knex = Knex.make(config);
 
-module Todos = {
+module Users = {
   let getAll = () =>
     Js.Promise.(
       knex
-      |> Knex.fromTable("todos")
+      |> Knex.fromTable("users")
       |> Knex.toPromise
       |> then_(results => {
-           Model.Todos.fromJson(results)
-           |> List.map(todo => {
-                Model.Todo.make(
-                  Model.Todo.getId(todo),
-                  Model.Todo.getDescription(todo),
-                  Model.Todo.isCompleted(todo),
+           Model.Users.fromJson(results)
+           |> List.map(user => {//  let make = (email, pseudo, password, name, surname, userRole, token) => {email, pseudo, password, name, surname, userRole, token};
+                Model.User.make(
+                  Model.User.getEmail(user),
+                  Model.User.getPseudo(user),
+                  Model.User.getPassword(user),
+                  Model.User.getName(user),
+                  Model.User.getSurname(user),
+                  Model.User.getUserRole(user),
+                  Model.User.getToken(user),
                 )
               })
-           |> Model.Todos.toJson
+           |> Model.Users.toJson
            |> resolve
          })
     );
@@ -41,54 +45,73 @@ module Todos = {
   let getByCompletness = cfilter =>
     Js.Promise.(
       knex
-      |> Knex.fromTable("todos")
+      |> Knex.fromTable("users")
       |> Knex.toPromise
       |> then_(results => {
-           Model.Todos.fromJson(results)
-           |> List.map(todo => {
-                Model.Todo.make(
-                  Model.Todo.getId(todo),
-                  Model.Todo.getDescription(todo),
-                  Model.Todo.isCompleted(todo),
+           Model.Users.fromJson(results)
+           |> List.map(user => {
+                Model.User.make(
+                  Model.User.getEmail(user),
+                  Model.User.getPseudo(user),
+                  Model.User.getPassword(user),
+                  Model.User.getName(user),
+                  Model.User.getSurname(user),
+                  Model.User.getUserRole(user),
+                  Model.User.getToken(user),
                 )
               })
-           |> Model.Todos.filterByCompletness(cfilter)  // to vary composition exemple, WHERE clause is better
-           |> Model.Todos.toJson
+           |> Model.Users.filterByCompletness(cfilter)  // to vary composition exemple, WHERE clause is better
+           |> Model.Users.toJson
            |> resolve
          })
     );
 
-  let getById: string => Js.Promise.t(Js.Json.t) =
-    id =>
+  let getByEmail: string => Js.Promise.t(Js.Json.t) =
+    email =>
       Js.Promise.(
         knex
-        |> Knex.fromTable("todos")
-        |> Knex.where({"id": id})
+        |> Knex.fromTable("users")
+        |> Knex.where({"email": email})
         |> Knex.toPromise
         |> then_(results => {
-             Model.Todos.fromJson(results)
-             |> List.map(todo => {
+             Model.Users.fromJson(results)
+             |> List.map(user => {
                   Model.Todo.make(
-                    Model.Todo.getId(todo),
-                    Model.Todo.getDescription(todo),
-                    Model.Todo.isCompleted(todo),
+                    Model.User.getEmail(user),
+                    Model.User.getPseudo(user),
+                    Model.User.getPassword(user),
+                    Model.User.getName(user),
+                    Model.User.getSurname(user),
+                    Model.User.getUserRole(user),
+                    Model.User.getToken(user),
                   )
                 })
-             |> Model.Todos.toJson
+             |> Model.Users.toJson
              |> resolve
            })
       );
-
-  let update = (id, description, completed) => {
-    let todo = Model.Todo.make(id, description, completed);
+   //email, pseudo, password, name, surname, userRole, token
+  let update = (email, pseudo, password, name, surname, userRole, token) => {
+    let user = Model.User.make(email, pseudo, password, name, surname, userRole, token);
     Js.Promise.(
       knex
       |> Knex.rawBinding(
-           "UPDATE todos SET DESCRIPTION=? , COMPLETED=? WHERE ID=?",
+           "UPDATE users SET 
+           pseudo=?, 
+           password=?, 
+           name=?, 
+           surname=?,
+           userRole=?,
+           token=?
+           WHERE email=?",
            (
-             Model.Todo.getDescription(todo),
-             Model.Todo.isCompleted(todo),
-             Model.Todo.getId(todo),
+            Model.User.getPseudo(user),
+            Model.User.getPassword(user),
+            Model.User.getName(user),
+            Model.User.getSurname(user),
+            Model.User.getUserRole(user),
+            Model.User.getToken(user),
+            Model.User.getEmail(user),
            ),
          )
       |> Knex.toPromise
@@ -96,16 +119,20 @@ module Todos = {
     );
   };
 
-  let create = description => {
-    let todo = Model.Todo.makeNew(description);
+  let create = (email, pseudo, password, name, surname, userRole, token) => {
+    let todo = Model.User.makeNew(email, pseudo, password, name, surname, userRole, token);
     Js.Promise.(
       knex
       |> Knex.rawBinding(
-           "INSERT INTO todos VALUES ( ? , ? , ?)",
+           "INSERT INTO users VALUES (?,?,?,?,?,?,?)",
            (
-             Model.Todo.getId(todo),
-             Model.Todo.getDescription(todo),
-             Model.Todo.isCompleted(todo),
+            Model.User.getEmail(user),
+            Model.User.getPseudo(user),
+            Model.User.getPassword(user),
+            Model.User.getName(user),
+            Model.User.getSurname(user),
+            Model.User.getUserRole(user),
+            Model.User.getToken(user),
            ),
          )
       |> Knex.toPromise

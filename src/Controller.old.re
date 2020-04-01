@@ -1,17 +1,17 @@
 open Express;
 
-module Users = {
+module Todos = {
   let getAll =
     PromiseMiddleware.from((_next, req, rep) => {
       let queryDict = Request.query(req);
       (
-        switch (queryDict->Js.Dict.get("completed")) {//TODO voir comment adapter ?
+        switch (queryDict->Js.Dict.get("completed")) {
         | Some(c) =>
           switch (c |> Json.Decode.string |> bool_of_string_opt) {
-          | Some(cfilter) => DataAccess.Users.getByCompletness(cfilter)
-          | None => DataAccess.Users.getAll()
+          | Some(cfilter) => DataAccess.Todos.getByCompletness(cfilter)
+          | None => DataAccess.Todos.getAll()
           }
-        | None => DataAccess.Users.getAll()
+        | None => DataAccess.Todos.getAll()
         }
       )
       |> Js.Promise.(
@@ -26,12 +26,12 @@ module Users = {
 
   let get =
     PromiseMiddleware.from((_next, req, rep) =>
-      switch (Request.params(req)->Js.Dict.get("email")) {
+      switch (Request.params(req)->Js.Dict.get("id")) {
       | None => rep |> Response.sendStatus(BadRequest) |> Js.Promise.resolve
-      | Some(email) =>
-      email
+      | Some(id) =>
+        id
         |> Json.Decode.string
-        |> DataAccess.Users.getByEmail
+        |> DataAccess.Todos.getById
         |> Js.Promise.(
              then_(todoJson => {
                rep
@@ -42,32 +42,29 @@ module Users = {
            )
       }
     );
-    
+
   let update =
     PromiseMiddleware.from((_next, req, rep) =>
       Js.Promise.(
         (
-          switch (Request.params(req)->Js.Dict.get("email")) {
-          | None => reject(Failure("INVALID email"))
-          | Some(email) =>
+          switch (Request.params(req)->Js.Dict.get("id")) {
+          | None => reject(Failure("INVALID MESSAGE"))
+          | Some(id) =>
             switch (Request.bodyJSON(req)) {
-            | None => reject(Failure("INVALID email"))
+            | None => reject(Failure("INVALID MESSAGE"))
             | Some(reqJson) =>
               switch (
-                reqJson |> Json.Decode.(field("email", optional(string))),
-              ) {   //email, pseudo, password, name, surname, userRole, token
+                reqJson |> Json.Decode.(field("MESSAGE", optional(string))),
+                reqJson |> Json.Decode.(field("COMPLETED", optional(bool))),
+              ) {
               | exception e => reject(e)
-              | (Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) =>
-                DataAccess.Users.update(
-                  Json.Decode.string(email),
-                  pseudo,
-                  password,
-                  name,
-                  surname,
-                  userRole,
-                  token,
+              | (Some(msg), Some(isCompleted)) =>
+                DataAccess.Todos.update(
+                  Json.Decode.string(id),
+                  msg,
+                  isCompleted,
                 )
-              | _ => reject(Failure("INVALID email"))
+              | _ => reject(Failure("INVALID MESSAGE"))
               }
             }
           }
@@ -76,7 +73,7 @@ module Users = {
              rep
              |> Response.setHeader("Status", "201")
              |> Response.sendJson(
-                  Json.Encode.(object_([("text", string("Updated user"))])),
+                  Json.Encode.(object_([("text", string("Updated todo"))])),
                 )
              |> resolve
            })
@@ -91,7 +88,7 @@ module Users = {
                     object_([
                       (
                         "error",
-                        string("INVALID REQUEST OR MISSING email FIELD"),
+                        string("INVALID REQUEST OR MISSING MESSAGE FIELD"),
                       ),
                     ])
                   ),
@@ -109,12 +106,11 @@ module Users = {
           | None => reject(Failure("INVALID REQUEST"))
           | Some(reqJson) =>
             switch (
-              reqJson |> Json.Decode.(field("email", optional(string)))
+              reqJson |> Json.Decode.(field("MESSAGE", optional(string)))
             ) {
             | exception e => reject(e)
-            | None => reject(Failure("INVALID email"))
-            | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) => 
-                DataAccess.Users.create(email, pseudo, password, name, surname, userRole, token)
+            | None => reject(Failure("INVALID MESSAGE"))
+            | Some(msg) => DataAccess.Todos.create(msg)
             }
           }
         )
@@ -122,7 +118,7 @@ module Users = {
              rep
              |> Response.setHeader("Status", "201")
              |> Response.sendJson(
-                  Json.Encode.(object_([("text", string("Created user"))])),
+                  Json.Encode.(object_([("text", string("Created todo"))])),
                 )
              |> resolve
            })
@@ -136,7 +132,7 @@ module Users = {
                     object_([
                       (
                         "error",
-                        string("INVALID REQUEST OR MISSING email FIELD"),
+                        string("INVALID REQUEST OR MISSING MESSAGE FIELD"),
                       ),
                     ])
                   ),
