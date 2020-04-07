@@ -119,11 +119,21 @@ module Users = {
     );
   };
 
-  let create = (email, pseudo, password, name, surname, userRole, token) => {
-    let user = Model.User.make(email, pseudo, password, name, surname, userRole, token);
+  let create = (email, pseudo, password, name, surname, userRole, token) => {  
+
+    let test = Password.Promise.deriveKey(Password.Algorithm.Bcrypt, password)
+    |> Js.Promise.then_(result =>
+      switch (result) {
+      | Belt.Result.Error(e) => raise(e)
+      | Belt.Result.Ok((_, hash)) =>  Model.User.make(email, pseudo, hash, name, surname, userRole, token);
+      }
+      |> Js.Promise.resolve
+    );
+
     Js.Promise.(
-      knex
-      |> Knex.rawBinding(
+      test
+      |> then_(user => 
+      Knex.rawBinding(
            "INSERT INTO users VALUES (?,?,?,?,?,?,?)",
            (
             Model.User.getEmail(user),
@@ -133,10 +143,11 @@ module Users = {
             Model.User.getSurname(user),
             Model.User.getUserRole(user),
             Model.User.getToken(user),
-           ),
+           ), knex
          )
       |> Knex.toPromise
+      )
       |> then_(_ => {resolve()})
-    );
+      );
   };
 };

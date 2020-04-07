@@ -26,7 +26,9 @@ module User: {
   };
 
   // create a value of the type Users.t
-  let make = (email, pseudo, password, name, surname, userRole, token) => {email, pseudo, password, name, surname, userRole, token};
+  let make = (email, pseudo, password, name, surname, userRole, token) => {
+    {email, pseudo, password, name, surname, userRole, token}
+  }
 
   // Setters
   let modifyUserRole = (newUserRole, user) => {...user, userRole: newUserRole};

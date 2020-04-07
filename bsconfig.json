@@ -20,7 +20,8 @@
     "bs-express",
     "bs-knex",
     "@glennsl/bs-json",
-    "bs-winston"
+    "bs-winston",
+    "bs-password"
   ],
   "refmt": 3
 }
