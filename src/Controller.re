@@ -42,6 +42,8 @@ module Users = {
            )
       }
     );
+
+    
     
   let update =
     PromiseMiddleware.from((_next, req, rep) =>
@@ -126,6 +128,49 @@ module Users = {
           rep
           |> Response.setHeader("Status", "200")
           |> Response.sendString(jwt)
+          |> resolve
+        })
+      |> catch(err => {
+          // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
+          Js.log(err);
+          rep
+          |> Response.setHeader("Status", "400")
+          |> Response.sendJson(
+                Json.Encode.(
+                  object_([
+                    (
+                      "error",
+                      string("Connexion échouée"),
+                    ),
+                  ])
+                ),
+              )
+          |> resolve;
+        })
+      )
+    );
+
+    let verify =
+  PromiseMiddleware.from((_next, req, rep) =>
+    Js.Promise.(
+      (
+        switch (Request.bodyJSON(req)) {
+        | None => reject(Failure("INVALID REQUEST"))
+        | Some(reqJson) =>
+          switch (
+            reqJson |> Json.Decode.(field("token", optional(string))),
+          ) {
+          | exception e => reject(e)
+          | (Some(token)) => 
+              DataAccess.Users.verify(token)
+          | _ => reject(Failure("Manque de données"))
+          }
+        }
+      )
+      |> then_(isValid => {
+          rep
+          |> Response.setHeader("Status", "200")
+          |> Response.sendJson(isValid)
           |> resolve
         })
       |> catch(err => {

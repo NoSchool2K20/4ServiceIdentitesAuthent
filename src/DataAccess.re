@@ -164,7 +164,7 @@ module Users = {
               | Belt.Result.Ok(bool) => 
                 switch(bool){
                   | true => 
-                  let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, notBefore: "1 days"});
+                  let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, expiresIn: "1 days"});
                   let myUser = users |> List.hd;
                   let payload = [
                     ("email", Json_encode.string(Model.User.getEmail(myUser))),
@@ -182,4 +182,13 @@ module Users = {
       })
       );
   };
+
+
+  let verify = token => {
+    let bool = JsonWebToken.verify(token,`string("issou")) |> Belt.Result.isOk
+    Js.Promise.(
+      Json_encode.bool(bool) |> resolve
+    );
+  };
+
 };

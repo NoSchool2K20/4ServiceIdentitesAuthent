@@ -26,6 +26,8 @@ App.get(app, ~path="/", Controller.welcome);
 App.get(app, ~path="/users", Controller.Users.getAll);
 App.get(app, ~path="/users/:email", Controller.Users.get);
 
+App.post(app, ~path="/verify", Controller.Users.verify);
+
 App.post(app, ~path="/users", Controller.Users.create);
 
 App.post(app, ~path="/connection", Controller.Users.connection);
