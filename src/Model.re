@@ -29,7 +29,6 @@ module User: {
   let make = (email, pseudo, password, name, surname, userRole, token) => {
     {email, pseudo, password, name, surname, userRole, token}
   }
-  let makeWithEmailHash = (email,password) => make(email, "pseudo", password,"name","surname","userrole","token");
 
 
   // Setters

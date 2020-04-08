@@ -18,6 +18,8 @@ let config =
 
 let knex = Knex.make(config);
 
+let algo = Password.Algorithm.Bcrypt;
+
 module Users = {
   let getAll = () =>
     Js.Promise.(
@@ -66,43 +68,6 @@ module Users = {
          })
     );
 
-
-    let connection = (email, password) => {
-      let promiseEmailAndPasswordCrypted = Password.Promise.deriveKey(Password.Algorithm.Bcrypt, password)
-      |> Js.Promise.then_(result =>
-        switch (result) {
-        | Belt.Result.Error(e) => raise(e)
-        | Belt.Result.Ok((_, hash)) => Model.User.make(email, "pseudo", hash, "name", "surname", "userRole", "token");// Model.User.makeWithEmailHash(email, hash);
-        }
-        |> Js.Promise.resolve
-      );
-  
-      Js.Promise.(
-        promiseEmailAndPasswordCrypted
-        |> then_(emailAndPasswordCrypted => 
-        knex
-        |> Knex.fromTable("users")
-        |> Knex.where({"email": Model.User.getEmail(emailAndPasswordCrypted),"password":Model.User.getPassword(emailAndPasswordCrypted)})
-        |> Knex.toPromise
-        )
-        |> then_(results => {
-          Model.Users.fromJson(results)
-          |> List.map(user => {
-               Model.User.make(
-                 Model.User.getEmail(user),
-                 Model.User.getPseudo(user),
-                 Model.User.getPassword(user),
-                 Model.User.getName(user),
-                 Model.User.getSurname(user),
-                 Model.User.getUserRole(user),
-                 Model.User.getToken(user),
-               )
-             })
-          |> Model.Users.toJson
-          |> resolve
-        })
-        );
-    };
 
   let getByEmail: string => Js.Promise.t(Js.Json.t) =
     email =>
@@ -158,7 +123,7 @@ module Users = {
   };
 
   let create = (email, pseudo, password, name, surname, userRole, token) => {  
-    let test = Password.Promise.deriveKey(Password.Algorithm.Bcrypt, password)
+    let userPromise = Password.Promise.deriveKey(algo, password)
     |> Js.Promise.then_(result =>
       switch (result) {
       | Belt.Result.Error(e) => raise(e)
@@ -168,7 +133,7 @@ module Users = {
     );
 
     Js.Promise.(
-      test
+      userPromise
       |> then_(user => 
       Knex.rawBinding(
            "INSERT INTO users VALUES (?,?,?,?,?,?,?)",
@@ -185,6 +150,30 @@ module Users = {
       |> Knex.toPromise
       )
       |> then_(_ => {resolve()})
+      );
+  };
+
+  let connection = (email, password) => {
+    Js.Promise.(
+      getByEmail(email)
+      |> then_(user => {
+        let users = user |> Model.Users.fromJson;
+        if(users |> List.length == 0){
+          raise(Not_found)
+        }
+        let hash = users |> List.hd |> Model.User.getPassword;
+        Password.Promise.verify(algo, hash, password)
+          |> then_(isValid =>
+            switch(isValid){
+              | Belt.Result.Error(e) => raise(e)
+              | Belt.Result.Ok(bool) => 
+                switch(bool){
+                  | true => user |> resolve
+                  | false => raise(Not_found)
+                }
+            }
+          ) 
+      })
       );
   };
 };
