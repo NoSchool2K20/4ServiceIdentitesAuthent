@@ -122,10 +122,10 @@ module Users = {
           }
         }
       )
-      |> then_(user => {
+      |> then_(jwt => {
           rep
           |> Response.setHeader("Status", "200")
-          |> Response.sendJson(user)
+          |> Response.sendString(jwt)
           |> resolve
         })
       |> catch(err => {

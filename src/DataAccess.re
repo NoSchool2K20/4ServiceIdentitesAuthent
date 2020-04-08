@@ -5,6 +5,7 @@
  ** While SQLite is not really suitable for production this part is more a POC to facilitate the conception of an API.
  */
 
+
 let connection =
   KnexConfig.Connection.make(~filename="./database/yatdb.sqlite", ());
 
@@ -162,7 +163,18 @@ module Users = {
               | Belt.Result.Error(e) => raise(e)
               | Belt.Result.Ok(bool) => 
                 switch(bool){
-                  | true => user |> resolve
+                  | true => 
+                  let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, notBefore: "1 days"});
+                  let myUser = users |> List.hd;
+                  let payload = [
+                    ("email", Json_encode.string(Model.User.getEmail(myUser))),
+                    ("pseudo", Json_encode.string(Model.User.getPseudo(myUser))),
+                    ("name", Json_encode.string(Model.User.getName(myUser))),
+                    ("surname", Json_encode.string(Model.User.getSurname(myUser))),
+                    ("userRole", Json_encode.string(Model.User.getUserRole(myUser))),
+                  ]
+                  let jwt = JsonWebToken.sign(~secret=`string("issou"), ~options, `json(Json_encode.object_(payload)));
+                  jwt |> resolve
                   | false => raise(Not_found)
                 }
             }

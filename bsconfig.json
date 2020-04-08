@@ -21,7 +21,8 @@
     "bs-knex",
     "@glennsl/bs-json",
     "bs-winston",
-    "bs-password"
+    "bs-password",
+    "@beem812/bs-jsonwebtoken"
   ],
   "refmt": 3
 }
