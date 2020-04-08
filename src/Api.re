@@ -27,6 +27,9 @@ App.get(app, ~path="/users", Controller.Users.getAll);
 App.get(app, ~path="/users/:email", Controller.Users.get);
 
 App.post(app, ~path="/users", Controller.Users.create);
+
+App.post(app, ~path="/connection", Controller.Users.connection);
+
 App.put(app, ~path="/users/:email", Controller.Users.update);
 
 App.useOnPath(app, ~path="*", Controller.badRessource);

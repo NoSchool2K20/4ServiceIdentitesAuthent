@@ -66,6 +66,44 @@ module Users = {
          })
     );
 
+
+    let connection = (email, password) => {
+      let promiseEmailAndPasswordCrypted = Password.Promise.deriveKey(Password.Algorithm.Bcrypt, password)
+      |> Js.Promise.then_(result =>
+        switch (result) {
+        | Belt.Result.Error(e) => raise(e)
+        | Belt.Result.Ok((_, hash)) => Model.User.make(email, "pseudo", hash, "name", "surname", "userRole", "token");// Model.User.makeWithEmailHash(email, hash);
+        }
+        |> Js.Promise.resolve
+      );
+  
+      Js.Promise.(
+        promiseEmailAndPasswordCrypted
+        |> then_(emailAndPasswordCrypted => 
+        knex
+        |> Knex.fromTable("users")
+        |> Knex.where({"email": Model.User.getEmail(emailAndPasswordCrypted),"password":Model.User.getPassword(emailAndPasswordCrypted)})
+        |> Knex.toPromise
+        )
+        |> then_(results => {
+          Model.Users.fromJson(results)
+          |> List.map(user => {
+               Model.User.make(
+                 Model.User.getEmail(user),
+                 Model.User.getPseudo(user),
+                 Model.User.getPassword(user),
+                 Model.User.getName(user),
+                 Model.User.getSurname(user),
+                 Model.User.getUserRole(user),
+                 Model.User.getToken(user),
+               )
+             })
+          |> Model.Users.toJson
+          |> resolve
+        })
+        );
+    };
+
   let getByEmail: string => Js.Promise.t(Js.Json.t) =
     email =>
       Js.Promise.(
@@ -120,7 +158,6 @@ module Users = {
   };
 
   let create = (email, pseudo, password, name, surname, userRole, token) => {  
-
     let test = Password.Promise.deriveKey(Password.Algorithm.Bcrypt, password)
     |> Js.Promise.then_(result =>
       switch (result) {

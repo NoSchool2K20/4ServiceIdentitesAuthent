@@ -29,6 +29,8 @@ module User: {
   let make = (email, pseudo, password, name, surname, userRole, token) => {
     {email, pseudo, password, name, surname, userRole, token}
   }
+  let makeWithEmailHash = (email,password) => make(email, "pseudo", password,"name","surname","userrole","token");
+
 
   // Setters
   let modifyUserRole = (newUserRole, user) => {...user, userRole: newUserRole};
@@ -69,7 +71,7 @@ module User: {
       object_([
         ("email", string(user.email)),
         ("pseudo", string(user.pseudo)),
-        ("password", string(user.password)),//maybe we could not show password in jsonEncode ?
+        ("password", string(user.password)),
         ("name", string(user.name)),
         ("surname", string(user.surname)),
         ("userRole", string(user.userRole)),
@@ -80,51 +82,13 @@ module User: {
 };
 
 module Users: {
-  type t = list(User.t); // do not overuse abstraction when unecessary
-  /*let filterByDescription: (string, t) => t;
-  let filterByCompletness: (bool, t) => t;*/
+  type t = list(User.t);
   let fromJson: Js.Json.t => t;
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
   let toString: t => string;
 } = {
   type t = list(User.t);
-
-  /*let filterBy:
-    (~userRole: option(string),~pseudo: option(string), t) => t =
-    (~userRole,~pseudo, users) => {
-      let descFiltered =
-      switch (userRole) {
-      | None => users
-      | Some(userRole) =>
-        List.filter(
-          item =>
-            // Use Js.String her because Buckelscript do not include Pervasive.Str from reason
-            // Simplify string manipulation without Str module avalaible
-            Js.String.(
-              includes(make(userRole), make(User.getUserRole(item)))
-            ),
-          users,
-        )
-      };
-      switch (pseudo) {
-      | None => descFiltered
-      | Some(pseudo) =>
-        List.filter(
-          item =>
-            // Use Js.String her because Buckelscript do not include Pervasive.Str from reason
-            // Simplify string manipulation without Str module avalaible
-            Js.String.(
-              includes(make(pseudo), make(User.getPseudo(item)))
-            ),
-          users,
-        )
-      };
-    };
-
-    
-  let filterByUserRole = userRole =>
-  filterBy(~userRole=Some(userRole), ~pseudo=None);*/
 
   let fromJson: Js.Json.t => t =
     json => json |> Json.Decode.(list(User.fromJson));

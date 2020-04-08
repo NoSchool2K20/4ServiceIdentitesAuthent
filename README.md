@@ -39,6 +39,11 @@ curl -X POST -H "Content-Type: application/json" -d "{
         \"token\": \"sontoken\" 
       }" http://127.0.0.1:8080/users
       
+curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"email\": \"chris@test.com\",
+        \"password\": \"momdp\"
+      }" http://127.0.0.1:8080/connection
+      
 # replace :id by a real id
 curl -X PUT -H "Content-Type: application/json" -d "{ 
         \"pseudo\": \"GotygeModifie\",

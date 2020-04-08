@@ -29,7 +29,7 @@ module Users = {
       switch (Request.params(req)->Js.Dict.get("email")) {
       | None => rep |> Response.sendStatus(BadRequest) |> Js.Promise.resolve
       | Some(email) =>
-      email
+        email
         |> Json.Decode.string
         |> DataAccess.Users.getByEmail
         |> Js.Promise.(
@@ -106,69 +106,100 @@ module Users = {
       )
     );
 
-    /*
-
-    curl -X POST -H "Content-Type: application/json" -d "{ 
-        \"email\": \"thomas@test.com\",
-        \"pseudo\": \"Gotyge\",
-        \"password\": \"momdp\",
-        \"name\": \"AUGUET\",
-        \"surname\": \"Thomas\",
-        \"userRole\": \"Administrateur\",
-        \"token\": \"montoken\" 
-      }" http://127.0.0.1:8080/users
-
-    */
-  let create =
-    PromiseMiddleware.from((_next, req, rep) =>
-      Js.Promise.(
-        (
-          switch (Request.bodyJSON(req)) {
-          | None => reject(Failure("INVALID REQUEST"))
-          | Some(reqJson) =>
-            switch (
-              reqJson |> Json.Decode.(field("email", optional(string))),
-              reqJson |> Json.Decode.(field("pseudo", optional(string))),
-              reqJson |> Json.Decode.(field("password", optional(string))),
-              reqJson |> Json.Decode.(field("name", optional(string))),
-              reqJson |> Json.Decode.(field("surname", optional(string))),
-              reqJson |> Json.Decode.(field("userRole", optional(string))),
-              reqJson |> Json.Decode.(field("token", optional(string))),
-            ) {
-            | exception e => reject(e)
-            | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) => 
-                DataAccess.Users.create(email, pseudo, password, name, surname, userRole, token)
-            | _ => reject(Failure("Manque de données"))
-            }
+  let connection =
+  PromiseMiddleware.from((_next, req, rep) =>
+    Js.Promise.(
+      (
+        switch (Request.bodyJSON(req)) {
+        | None => reject(Failure("INVALID REQUEST"))
+        | Some(reqJson) =>
+          switch (
+            reqJson |> Json.Decode.(field("email", optional(string))),
+            reqJson |> Json.Decode.(field("password", optional(string))),
+          ) {
+          | exception e => reject(e)
+          | (Some(email),Some(password)) => 
+              DataAccess.Users.connection(email, password)
+          | _ => reject(Failure("Manque de données"))
           }
-        )
-        |> then_(() => {
-             rep
-             |> Response.setHeader("Status", "201")
-             |> Response.sendJson(
-                  Json.Encode.(object_([("text", string("Created user"))])),
-                )
-             |> resolve
-           })
-        |> catch(err => {
-             // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
-             Js.log(err);
-             rep
-             |> Response.setHeader("Status", "400")
-             |> Response.sendJson(
-                  Json.Encode.(
-                    object_([
-                      (
-                        "error",
-                        string("INVALID REQUEST OR MISSING email FIELD"),
-                      ),
-                    ])
-                  ),
-                )
-             |> resolve;
-           })
+        }
+      )
+      |> then_(user => {
+          rep
+          |> Response.setHeader("Status", "200")
+          |> Response.sendJson(user)
+          |> resolve
+        })
+      |> catch(err => {
+          // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
+          Js.log(err);
+          rep
+          |> Response.setHeader("Status", "400")
+          |> Response.sendJson(
+                Json.Encode.(
+                  object_([
+                    (
+                      "error",
+                      string("Connexion échouée"),
+                    ),
+                  ])
+                ),
+              )
+          |> resolve;
+        })
       )
     );
+  
+  let create =
+  PromiseMiddleware.from((_next, req, rep) =>
+    Js.Promise.(
+      (
+        switch (Request.bodyJSON(req)) {
+        | None => reject(Failure("INVALID REQUEST"))
+        | Some(reqJson) =>
+          switch (
+            reqJson |> Json.Decode.(field("email", optional(string))),
+            reqJson |> Json.Decode.(field("pseudo", optional(string))),
+            reqJson |> Json.Decode.(field("password", optional(string))),
+            reqJson |> Json.Decode.(field("name", optional(string))),
+            reqJson |> Json.Decode.(field("surname", optional(string))),
+            reqJson |> Json.Decode.(field("userRole", optional(string))),
+            reqJson |> Json.Decode.(field("token", optional(string))),
+          ) {
+          | exception e => reject(e)
+          | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) => 
+              DataAccess.Users.create(email, pseudo, password, name, surname, userRole, token)
+          | _ => reject(Failure("Manque de données"))
+          }
+        }
+      )
+      |> then_(() => {
+           rep
+           |> Response.setHeader("Status", "201")
+           |> Response.sendJson(
+                Json.Encode.(object_([("text", string("Created user"))])),
+              )
+           |> resolve
+         })
+      |> catch(err => {
+           // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
+           Js.log(err);
+           rep
+           |> Response.setHeader("Status", "400")
+           |> Response.sendJson(
+                Json.Encode.(
+                  object_([
+                    (
+                      "error",
+                      string("INVALID REQUEST OR MISSING email FIELD"),
+                    ),
+                  ])
+                ),
+              )
+           |> resolve;
+         })
+    )
+  );
 };
 
 let welcome =
