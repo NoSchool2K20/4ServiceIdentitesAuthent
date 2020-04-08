@@ -25,8 +25,7 @@ curl -X POST -H "Content-Type: application/json" -d "{
         \"password\": \"momdp\",
         \"name\": \"AUGUET\",
         \"surname\": \"Thomas\",
-        \"userRole\": \"Administrateur\",
-        \"token\": \"montoken\" 
+        \"userRole\": \"Administrateur\"
       }" http://127.0.0.1:8080/users
       
 curl -X POST -H "Content-Type: application/json" -d "{ 
@@ -35,8 +34,7 @@ curl -X POST -H "Content-Type: application/json" -d "{
         \"password\": \"momdp\",
         \"name\": \"DUCROCQ\",
         \"surname\": \"Christopher\",
-        \"userRole\": \"Etudiant\",
-        \"token\": \"sontoken\" 
+        \"userRole\": \"Etudiant\"
       }" http://127.0.0.1:8080/users
       
 curl -X POST -H "Content-Type: application/json" -d "{ 
@@ -50,8 +48,7 @@ curl -X PUT -H "Content-Type: application/json" -d "{
         \"password\": \"momdp\",
         \"name\": \"AUGUET\",
         \"surname\": \"Thomas\",
-        \"userRole\": \"Administrateur\",
-        \"token\": \"montoken\" 
+        \"userRole\": \"Administrateur\"
       }" http://127.0.0.1:8080/users/thomas@test.com
       
 curl http://127.0.0.1:8080/users

@@ -59,10 +59,9 @@ module Users = {
                 reqJson |> Json.Decode.(field("name", optional(string))),
                 reqJson |> Json.Decode.(field("surname", optional(string))),
                 reqJson |> Json.Decode.(field("userRole", optional(string))),
-                reqJson |> Json.Decode.(field("token", optional(string))),
-              ) {   //email, pseudo, password, name, surname, userRole, token
+              ) {   //email, pseudo, password, name, surname, userRole
               | exception e => reject(e)
-              | (Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) =>
+              | (Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole)) =>
                 DataAccess.Users.update(
                   Json.Decode.string(email),
                   pseudo,
@@ -70,7 +69,6 @@ module Users = {
                   name,
                   surname,
                   userRole,
-                  token,
                 )
               | _ => reject(Failure("INVALID email"))
               }
@@ -164,11 +162,10 @@ module Users = {
             reqJson |> Json.Decode.(field("name", optional(string))),
             reqJson |> Json.Decode.(field("surname", optional(string))),
             reqJson |> Json.Decode.(field("userRole", optional(string))),
-            reqJson |> Json.Decode.(field("token", optional(string))),
           ) {
           | exception e => reject(e)
-          | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole), Some(token)) => 
-              DataAccess.Users.create(email, pseudo, password, name, surname, userRole, token)
+          | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole)) => 
+              DataAccess.Users.create(email, pseudo, password, name, surname, userRole)
           | _ => reject(Failure("Manque de données"))
           }
         }

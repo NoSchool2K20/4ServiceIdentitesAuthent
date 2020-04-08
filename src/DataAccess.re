@@ -28,7 +28,7 @@ module Users = {
       |> Knex.toPromise
       |> then_(results => {
            Model.Users.fromJson(results)
-           |> List.map(user => {//  let make = (email, pseudo, password, name, surname, userRole, token) => {email, pseudo, password, name, surname, userRole, token};
+           |> List.map(user => {//  let make = (email, pseudo, password, name, surname, userRole) => {email, pseudo, password, name, surname, userRole};
                 Model.User.make(
                   Model.User.getEmail(user),
                   Model.User.getPseudo(user),
@@ -36,7 +36,6 @@ module Users = {
                   Model.User.getName(user),
                   Model.User.getSurname(user),
                   Model.User.getUserRole(user),
-                  Model.User.getToken(user),
                 )
               })
            |> Model.Users.toJson
@@ -60,7 +59,6 @@ module Users = {
                   Model.User.getName(user),
                   Model.User.getSurname(user),
                   Model.User.getUserRole(user),
-                  Model.User.getToken(user),
                 )
               })
            |> Model.Users.toJson
@@ -86,7 +84,6 @@ module Users = {
                     Model.User.getName(user),
                     Model.User.getSurname(user),
                     Model.User.getUserRole(user),
-                    Model.User.getToken(user),
                   )
                 })
              |> Model.Users.toJson
@@ -94,8 +91,8 @@ module Users = {
            })
       );
    //email, pseudo, password, name, surname, userRole, token
-  let update = (email, pseudo, password, name, surname, userRole, token) => {
-    let user = Model.User.make(email, pseudo, password, name, surname, userRole, token);
+  let update = (email, pseudo, password, name, surname, userRole) => {
+    let user = Model.User.make(email, pseudo, password, name, surname, userRole);
     Js.Promise.(
       knex
       |> Knex.rawBinding(
@@ -104,8 +101,7 @@ module Users = {
            password=?, 
            name=?, 
            surname=?,
-           userRole=?,
-           token=?
+           userRole=?
            WHERE email=?",
            (
             Model.User.getPseudo(user),
@@ -113,7 +109,6 @@ module Users = {
             Model.User.getName(user),
             Model.User.getSurname(user),
             Model.User.getUserRole(user),
-            Model.User.getToken(user),
             Model.User.getEmail(user),
            ),
          )
@@ -122,12 +117,12 @@ module Users = {
     );
   };
 
-  let create = (email, pseudo, password, name, surname, userRole, token) => {  
+  let create = (email, pseudo, password, name, surname, userRole) => {  
     let userPromise = Password.Promise.deriveKey(algo, password)
     |> Js.Promise.then_(result =>
       switch (result) {
       | Belt.Result.Error(e) => raise(e)
-      | Belt.Result.Ok((_, hash)) =>  Model.User.make(email, pseudo, hash, name, surname, userRole, token);
+      | Belt.Result.Ok((_, hash)) =>  Model.User.make(email, pseudo, hash, name, surname, userRole);
       }
       |> Js.Promise.resolve
     );
@@ -136,7 +131,7 @@ module Users = {
       userPromise
       |> then_(user => 
       Knex.rawBinding(
-           "INSERT INTO users VALUES (?,?,?,?,?,?,?)",
+           "INSERT INTO users VALUES (?,?,?,?,?,?)",
            (
             Model.User.getEmail(user),
             Model.User.getPseudo(user),
@@ -144,7 +139,6 @@ module Users = {
             Model.User.getName(user),
             Model.User.getSurname(user),
             Model.User.getUserRole(user),
-            Model.User.getToken(user),
            ), knex
          )
       |> Knex.toPromise

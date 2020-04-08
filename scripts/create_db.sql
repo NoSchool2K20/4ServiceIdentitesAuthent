@@ -38,8 +38,8 @@ CREATE TABLE users( -- table of users in the application, the token is here for 
    password                TEXT              NOT NULL,--Story 2 : En tant que « nouveau », si je dispose d’un compte, je peux me connecter
    name                    TEXT              ,
    surname                 TEXT              ,
-   userRole                TEXT              NOT NULL,--énumération : nouveau, étudiant, professeur, administrateur
-   token                   TEXT               --Story 5 : En tant que « utilisateur », je peux demander la validation de mon token. 
+   userRole                TEXT              NOT NULL--énumération : nouveau, étudiant, professeur, administrateur
+   --Story 5 : En tant que « utilisateur », je peux demander la validation de mon token. 
    --RG 1 : Le process d’authentification se base sur la mise en place de token JWT signés et expirant à leur date d’émission + 3 jours
    --RG 2 : Le secret JWT peut être partagé avec les backend le nécessitant tant qu’ils sont hébergé sur le même compte clever-cloud grâce à un add on « Configuration provider »
 );
