@@ -42,6 +42,10 @@ curl -X POST -H "Content-Type: application/json" -d "{
         \"password\": \"momdp\"
       }" http://127.0.0.1:8080/connection
       
+curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"token\": \"unTokenGenereLorsDunPost\"
+      }" http://127.0.0.1:8080/verify
+      
 # replace :id by a real id
 curl -X PUT -H "Content-Type: application/json" -d "{ 
         \"pseudo\": \"GotygeModifie\",
