@@ -164,7 +164,7 @@ module Users = {
               | Belt.Result.Ok(bool) => 
                 switch(bool){
                   | true => 
-                  let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, expiresIn: "1 days"});
+                  let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, expiresIn: "3 days"});
                   let myUser = users |> List.hd;
                   let payload = [
                     ("email", Json_encode.string(Model.User.getEmail(myUser))),
