@@ -4,7 +4,7 @@
   "description": "Backend API built with ReasonML and Buckelscript",
   "main": "src/Index.bs.js",
   "scripts": {
-	"install": "npm run db:create && npm run build";
+	"install": "npm run db:create && npm run build",
     "bsb:build": "bsb -make-world",
     "dev": "concurrently -c magenta,cyan \"npm:bsb:watch\" \"npm:server\"",
     "bsb:watch": "bsb -make-world -w -ws _ ",
