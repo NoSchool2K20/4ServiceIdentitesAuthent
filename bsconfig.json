@@ -22,7 +22,8 @@
     "@glennsl/bs-json",
     "bs-winston",
     "bs-password",
-    "@beem812/bs-jsonwebtoken"
+    "@beem812/bs-jsonwebtoken",
+    "bs-amqp-connection-manager"
   ],
   "refmt": 3
 }

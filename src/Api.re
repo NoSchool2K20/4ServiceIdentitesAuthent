@@ -9,6 +9,8 @@ open Express;
 
 // bs-express lacks http://expressjs.com/en/4x/api.html#express.json
 [@bs.module "express"] external json: unit => Middleware.t = "json";
+[@bs.module] external cors: unit => Express.Middleware.t = "cors";
+
 
 // INSTANCIATE AN EXPRESS APPLICATION
 let app = express();
@@ -17,6 +19,7 @@ let app = express();
 App.use(app, helmet());
 App.use(app, compression());
 App.use(app, json());
+App.use(app, cors());
 // setup a middelware that log all access at info level - not GDPR compliant :)
 App.use(app, Controller.logRequest);
 
