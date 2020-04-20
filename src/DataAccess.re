@@ -174,7 +174,7 @@ module Users = {
                     ("userRole", Json_encode.string(Model.User.getUserRole(myUser))),
                   ]
                   let jwt = JsonWebToken.sign(~secret=`string("issou"), ~options, `json(Json_encode.object_(payload)));
-                  jwt |> resolve
+                  Json_encode.object_([("token", Json_encode.string(jwt))]) |> resolve
                   | false => raise(Not_found)
                 }
             }
