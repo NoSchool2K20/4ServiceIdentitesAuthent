@@ -266,3 +266,53 @@ let badRessource =
   Middleware.from((_next, _req, rep) =>
     rep |> Response.sendStatus(NotFound)
   );
+
+
+let authenticate =
+Middleware.from((next, req) => {
+  switch (Request.get("authorization", req)) {
+  | Some(token) => {
+    let tokenWithoutBear = Js.String.split(" ", token)[1];
+    let bool = JsonWebToken.verify(tokenWithoutBear,`string("issou")) |> Belt.Result.isOk
+    if(bool){
+      let payload = JsonWebToken.decode(tokenWithoutBear)
+      Js.Dict.set(Request.asJsonObject(req), "user", payload)  
+      next(Next.middleware)
+    } else{
+      Response.sendStatus(Forbidden)
+    }
+  }
+  | None => Response.sendStatus(Unauthorized)
+  };
+});
+
+let permit = (role : string) => {
+  Middleware.from((next, req) => {
+  switch (Js.Dict.get(Request.asJsonObject(req), "user")) {
+  | None => Response.sendStatus(Unauthorized)
+  | Some(user) =>
+    switch (Js.Json.decodeObject(user)) {
+    | Some(myUser) => {
+      switch(Js_dict.get(myUser, "userRole")){
+        | Some(userRole) => {
+          switch (Js.Json.decodeString(userRole)) {
+            | Some(userRole) => {
+              Js.log(role == userRole)
+              if(role == userRole){
+                next(Next.middleware)
+              } else {
+                Response.sendStatus(Unauthorized)
+              }
+            }
+            |None => Response.sendStatus(Unauthorized)
+          }
+        }
+        | None =>  Response.sendStatus(Unauthorized)
+      }
+    } 
+    | _ => Response.sendStatus(Unauthorized)
+    }
+  };
+  });
+};
+

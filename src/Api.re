@@ -24,7 +24,8 @@ App.use(app, cors());
 App.use(app, Controller.logRequest);
 
 // SETUP ROUTES
-App.get(app, ~path="/", Controller.welcome);
+// Example with welcome route
+App.getWithMany(app, ~path="/", [|Controller.authenticate, "Nouveau" |> Controller.permit, Controller.welcome|]);
 
 App.get(app, ~path="/users", Controller.Users.getAll);
 App.get(app, ~path="/users/:email", Controller.Users.get);
