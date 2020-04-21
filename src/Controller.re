@@ -206,11 +206,10 @@ module Users = {
             reqJson |> Json.Decode.(field("password", optional(string))),
             reqJson |> Json.Decode.(field("name", optional(string))),
             reqJson |> Json.Decode.(field("surname", optional(string))),
-            reqJson |> Json.Decode.(field("userRole", optional(string))),
           ) {
           | exception e => reject(e)
-          | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname), Some(userRole)) => 
-              DataAccess.Users.create(email, pseudo, password, name, surname, userRole)
+          | (Some(email),Some(pseudo), Some(password), Some(name), Some(surname)) => 
+              DataAccess.Users.create(email, pseudo, password, name, surname)
           | _ => reject(Failure("Manque de données"))
           }
         }

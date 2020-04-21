@@ -20,6 +20,8 @@
   "dependencies": {
     "@beem812/bs-jsonwebtoken": "^0.2.3",
     "@glennsl/bs-json": "^5.0.2",
+    "amqp-connection-manager": "^3.2.0",
+    "amqplib": "^0.5.5",
     "bs-amqp-connection-manager": "^3.1.0",
     "bs-express": "^1.0.1",
     "bs-knex": "^3.1.0",

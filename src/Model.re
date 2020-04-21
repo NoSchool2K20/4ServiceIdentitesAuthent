@@ -12,6 +12,7 @@ module User: {
   let fromJson: Js.Json.t => t;
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
+  let toJsonWithoutPassword: t => Js.Json.t;
   let toString: t => string;
 } = {
   type t = {
@@ -72,6 +73,20 @@ module User: {
         ("userRole", string(user.userRole)),
       ])
     );
+
+    let toJsonWithoutPassword = user =>
+    // Json module comes from bs-json, it is not Js.Json module
+    // Use of bs-json to encode json in expressive way while you can use Js.Json / Js.Dict in an imperative way
+    Json.Encode.(
+      object_([
+        ("email", string(user.email)),
+        ("pseudo", string(user.pseudo)),
+        ("name", string(user.name)),
+        ("surname", string(user.surname)),
+        ("userRole", string(user.userRole)),
+      ])
+    );
+
   let toString = user => toJson(user) |> Js.Json.stringify;
 };
 

@@ -118,33 +118,37 @@ module Users = {
     );
   };
 
-  let create = (email, pseudo, password, name, surname, userRole) => {  
+  let create = (email, pseudo, password, name, surname) => {  
     let userPromise = Password.Promise.deriveKey(algo, password)
     |> Js.Promise.then_(result =>
       switch (result) {
       | Belt.Result.Error(e) => raise(e)
-      | Belt.Result.Ok((_, hash)) =>  Model.User.make(email, pseudo, hash, name, surname, userRole);
+      | Belt.Result.Ok((_, hash)) =>  Model.User.make(email, pseudo, hash, name, surname, "Nouveau");
       }
       |> Js.Promise.resolve
     );
 
     Js.Promise.(
       userPromise
-      |> then_(user => 
+      |> then_(user => {
       Knex.rawBinding(
-           "INSERT INTO users VALUES (?,?,?,?,?,?)",
-           (
-            Model.User.getEmail(user),
-            Model.User.getPseudo(user),
-            Model.User.getPassword(user),
-            Model.User.getName(user),
-            Model.User.getSurname(user),
-            Model.User.getUserRole(user),
-           ), knex
-         )
-      |> Knex.toPromise
+        "INSERT INTO users VALUES (?,?,?,?,?,?)",
+        (
+         Model.User.getEmail(user),
+         Model.User.getPseudo(user),
+         Model.User.getPassword(user),
+         Model.User.getName(user),
+         Model.User.getSurname(user),
+         Model.User.getUserRole(user),
+        ), knex
+      ) |> Knex.toPromise |> resolve |> ignore
+        user |> resolve
+      }
       )
-      |> then_(_ => {resolve()})
+      |> then_(user => {
+        AmqpSender.sendNewUser(Model.User.toJsonWithoutPassword(user)) |> ignore
+        resolve()
+      })
       );
   };
 
@@ -165,15 +169,8 @@ module Users = {
                 switch(bool){
                   | true => 
                   let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, expiresIn: "3 days"});
-                  let myUser = users |> List.hd;
-                  let payload = [
-                    ("email", Json_encode.string(Model.User.getEmail(myUser))),
-                    ("pseudo", Json_encode.string(Model.User.getPseudo(myUser))),
-                    ("name", Json_encode.string(Model.User.getName(myUser))),
-                    ("surname", Json_encode.string(Model.User.getSurname(myUser))),
-                    ("userRole", Json_encode.string(Model.User.getUserRole(myUser))),
-                  ]
-                  let jwt = JsonWebToken.sign(~secret=`string("issou"), ~options, `json(Json_encode.object_(payload)));
+                  let myUser = users |> List.hd |> Model.User.toJsonWithoutPassword;
+                  let jwt = JsonWebToken.sign(~secret=`string("issou"), ~options, `json(myUser));
                   Json_encode.object_([("token", Json_encode.string(jwt))]) |> resolve
                   | false => raise(Not_found)
                 }
