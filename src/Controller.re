@@ -297,7 +297,6 @@ let permit = (role : string) => {
         | Some(userRole) => {
           switch (Js.Json.decodeString(userRole)) {
             | Some(userRole) => {
-              Js.log(role == userRole)
               if(role == userRole){
                 next(Next.middleware)
               } else {
