@@ -1,11 +1,126 @@
 open Express;
 
+module AssignmentRequest = {
+  let getAll =
+    PromiseMiddleware.from((_next, req, rep) => {
+        DataAccess.AssignmentRequest.getAll()
+      
+      |> Js.Promise.(
+           then_(requests => {
+             rep
+             |> Response.setHeader("Status", "200")
+             |> Response.sendJson(requests)
+             |> resolve
+           })
+         );
+  });
+    
+  let acceptOrDecline =
+  PromiseMiddleware.from((_next, req, rep) =>
+    Js.Promise.(
+      (
+        switch (Request.params(req)->Js.Dict.get("id")) {
+        | None => reject(Failure("INVALID id"))
+        | Some(id) =>
+          switch (Request.bodyJSON(req)) {
+          | None => reject(Failure("INVALID id"))
+          | Some(reqJson) =>
+            switch (
+              reqJson |> Json.Decode.(field("decision", optional(bool))),
+            ) {
+            | exception e => reject(e)
+            | (Some(decision)) =>
+              //if the decision is true, we update the role of the user concerning the id decision
+  
+              
+              //in both cases, update Processed (for TRUE) of the assignment request
+              | _ => reject(Failure("INVALID id"))
+            }
+          }
+        }
+      )
+      |> then_(() => {
+           rep
+           |> Response.setHeader("Status", "201")
+           |> Response.sendJson(
+                Json.Encode.(object_([("text", string("Updated user"))])),
+              )
+           |> resolve
+         })
+      |> catch(err => {
+           // Sadly no way to get Js.Promise.error message in a safe way
+           Js.log(err);
+           rep
+           |> Response.setHeader("Status", "400")
+           |> Response.sendJson(
+                Json.Encode.(
+                  object_([
+                    (
+                      "error",
+                      string("INVALID REQUEST OR MISSING email FIELD"),
+                    ),
+                  ])
+                ),
+              )
+           |> resolve;
+         })
+    )
+  );
+  
+    let create =
+    PromiseMiddleware.from((_next, req, rep) =>
+      Js.Promise.(
+        (
+          switch (Request.bodyJSON(req)) {
+          | None => reject(Failure("INVALID REQUEST"))
+          | Some(reqJson) =>
+            switch (
+              reqJson |> Json.Decode.(field("emailUserForAssignment", optional(string))),
+              reqJson |> Json.Decode.(field("roleRequest", optional(string))),
+            ) {
+            | exception e => reject(e)
+            | (Some(emailUserForAssignment),Some(roleRequest)) => 
+                DataAccess.AssignmentRequest.create(emailUserForAssignment, roleRequest)
+            | _ => reject(Failure("Manque de données"))
+            }
+          }
+        )
+        |> then_(() => {
+             rep
+             |> Response.setHeader("Status", "201")
+             |> Response.sendJson(
+                  Json.Encode.(object_([("text", string("Created AR"))])),
+                )
+             |> resolve
+           })
+        |> catch(err => {
+             // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
+             Js.log(err);
+             rep
+             |> Response.setHeader("Status", "400")
+             |> Response.sendJson(
+                  Json.Encode.(
+                    object_([
+                      (
+                        "error",
+                        string("INVALID REQUEST OR MISSING FIELDS"),
+                      ),
+                    ])
+                  ),
+                )
+             |> resolve;
+           })
+      )
+    );
+
+};
+
 module Users = {
   let getAll =
     PromiseMiddleware.from((_next, req, rep) => {
       let queryDict = Request.query(req);
       (
-        switch (queryDict->Js.Dict.get("userRole")) {//TODO voir comment adapter ?
+        switch (queryDict->Js.Dict.get("userRole")) {
         | Some(c) =>
           switch (c |> Json.Decode.string |> bool_of_string_opt) {
           | Some(cfilter) => DataAccess.Users.getByUserRole(cfilter)
@@ -246,7 +361,7 @@ module Users = {
 let welcome =
   Middleware.from((_next, _req) => {
     Json.Encode.(
-      object_([("text", string("Welcome to Yet Antother Todo api"))])
+      object_([("text", string("Welcome to Yet Another Api"))])
     )
     |> Response.sendJson
   });

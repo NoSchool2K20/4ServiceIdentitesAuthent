@@ -57,3 +57,10 @@ curl -X PUT -H "Content-Type: application/json" -d "{
       
 curl http://127.0.0.1:8080/users
 curl http://127.0.0.1:8080/users/thomas@test.com
+
+
+curl -X POST -H "Content-Type: application/json" -d "{ 
+        \"emailUserForAssignment\": \"thomas@test.com\",
+        \"roleRequest\": \"Etudiant\"
+      }" http://127.0.0.1:8080/assignmentRequest
+curl http://127.0.0.1:8080/assignmentRequest

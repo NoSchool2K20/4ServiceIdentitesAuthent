@@ -21,6 +21,53 @@ let knex = Knex.make(config);
 
 let algo = Password.Algorithm.Bcrypt;
 
+
+module AssignmentRequest = {
+  let create = (emailUserForAssignment,roleRequest) => {
+    let assignmentrequest = Model.AssignmentRequest.make(0,emailUserForAssignment,roleRequest,false,false);
+    Js.Promise.(
+      knex
+      |> Knex.rawBinding(
+           "INSERT INTO assignmentrequest
+           (emailUserForAssignment,roleRequest,decision,processed)
+            VALUES (?,?,?,?)",
+           (
+             Model.AssignmentRequest.getEmailUserForAssignment(assignmentrequest),
+             Model.AssignmentRequest.getRoleRequest(assignmentrequest),
+             Model.AssignmentRequest.getDecision(assignmentrequest),
+             Model.AssignmentRequest.getProcessed(assignmentrequest)
+           ),
+         )
+      |> Knex.toPromise
+      |> then_(_ => {resolve()})
+    );
+  };
+
+
+  let getAll = () =>
+    Js.Promise.(
+      knex
+      |> Knex.fromTable("assignmentrequest")
+      |> Knex.where({"processed": false})
+      |> Knex.toPromise
+      |> then_(results => {
+          Model.AssignmentRequests.fromJson(results)
+           |> List.map(assiR => {
+                Model.AssignmentRequest.make(
+                  Model.AssignmentRequest.getAssignmentRequestId(assiR),
+                  Model.AssignmentRequest.getEmailUserForAssignment(assiR),
+                  Model.AssignmentRequest.getRoleRequest(assiR),
+                  Model.AssignmentRequest.getDecision(assiR),
+                  Model.AssignmentRequest.getProcessed(assiR)
+                )
+              })
+           |> Model.AssignmentRequests.toJson
+           |> resolve
+        })
+  );
+
+};
+
 module Users = {
   let getAll = () =>
     Js.Promise.(
@@ -118,7 +165,7 @@ module Users = {
     );
   };
 
-  let create = (email, pseudo, password, name, surname) => {  
+  let create = (email, pseudo, password, name, surname) => {
     let userPromise = Password.Promise.deriveKey(algo, password)
     |> Js.Promise.then_(result =>
       switch (result) {

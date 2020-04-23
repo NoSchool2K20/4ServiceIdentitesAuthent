@@ -29,7 +29,8 @@ token : pseudo, email
 
 
 */
-
+DROP TABLE assignmentrequest;
+DROP TABLE users;
 
 --Story 1 : En tant que « nouveau », je peux créer mon compte
 CREATE TABLE users( -- table of users in the application, the token is here for the security and manage the connection on the front
@@ -54,11 +55,12 @@ Donc la mise en place de RabbitMQ est hors de notre périmètre,
 
 TODO : à voir si on doit avoir la table ci-dessous pour la gestion des demandes ou non ?
 */
-/*
-CREATE TABLE assignmentRequest( --allows administrators to see request and to accept an assignment
+
+CREATE TABLE assignmentrequest( --allows administrators to see request and to accept an assignment
+   assignmentRequestId          INTEGER PRIMARY KEY,
    emailUserForAssignment       TEXT NOT NULL,
    roleRequest                  TEXT NOT NULL,
-   dateOfRequest                TEXT NOT NULL, --https://www.sqlite.org/datatype3.html 2.2. Date and Time Datatype => TEXT as ISO8601 strings ("YYYY-MM-DD HH:MM:SS.SSS"). 
-   accepted                     BOOLEAN DEFAULT FALSE, --Story 4 : En tant que « administrateur », je accepter ou refuser une élévation de privilège.
+   decision                     BOOLEAN DEFAULT NULL, --Story 4 : En tant que « administrateur », je accepter ou refuser une élévation de privilège.
+   processed                    BOOLEAN DEFAULT FALSE, --to know if the decision is processed or not
    FOREIGN KEY(emailUserForAssignment) REFERENCES users(email)
-)*/
+);
