@@ -2,7 +2,7 @@ open Express;
 
 module AssignmentRequest = {
   let getAll =
-    PromiseMiddleware.from((_next, req, rep) => {
+    PromiseMiddleware.from((_next, _, rep) => {
         DataAccess.AssignmentRequest.getAll()
       
       |> Js.Promise.(
@@ -14,7 +14,22 @@ module AssignmentRequest = {
            })
          );
   });
+
+  let getAllWithProcessed = processed => {
+  PromiseMiddleware.from((_next, _, rep) => {
+      DataAccess.AssignmentRequest.getAllWithProcessed(processed)
     
+    |> Js.Promise.(
+         then_(requests => {
+           rep
+           |> Response.setHeader("Status", "200")
+           |> Response.sendJson(requests)
+           |> resolve
+         })
+       );
+});
+  };
+  /*
   let acceptOrDecline =
   PromiseMiddleware.from((_next, req, rep) =>
     Js.Promise.(
@@ -66,6 +81,7 @@ module AssignmentRequest = {
          })
     )
   );
+  */
   
     let create =
     PromiseMiddleware.from((_next, req, rep) =>
@@ -75,12 +91,20 @@ module AssignmentRequest = {
           | None => reject(Failure("INVALID REQUEST"))
           | Some(reqJson) =>
             switch (
-              reqJson |> Json.Decode.(field("emailUserForAssignment", optional(string))),
               reqJson |> Json.Decode.(field("roleRequest", optional(string))),
             ) {
             | exception e => reject(e)
-            | (Some(emailUserForAssignment),Some(roleRequest)) => 
-                DataAccess.AssignmentRequest.create(emailUserForAssignment, roleRequest)
+            | (Some(roleRequest)) => 
+                switch (req |> Model.User.fromRequest){
+                  | Some(user) => {
+                    if(roleRequest == "Etudiant" || roleRequest == "Professeur"){
+                      DataAccess.AssignmentRequest.create(user |> Model.User.getEmail, roleRequest)
+                    } else {
+                      reject(Failure("INVALID ROLE ASKED"))
+                    }
+                  }
+                  | None => reject(Failure("INVALID USER"))
+                }
             | _ => reject(Failure("Manque de données"))
             }
           }

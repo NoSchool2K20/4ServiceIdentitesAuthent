@@ -57,7 +57,7 @@ TODO : à voir si on doit avoir la table ci-dessous pour la gestion des demandes
 */
 
 CREATE TABLE assignmentrequest( --allows administrators to see request and to accept an assignment
-   assignmentRequestId          INTEGER PRIMARY KEY,
+   assignmentRequestId          TEXT PRIMARY KEY,
    emailUserForAssignment       TEXT NOT NULL,
    roleRequest                  TEXT NOT NULL,
    decision                     BOOLEAN DEFAULT NULL, --Story 4 : En tant que « administrateur », je accepter ou refuser une élévation de privilège.

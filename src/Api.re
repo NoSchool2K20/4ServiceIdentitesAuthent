@@ -38,15 +38,12 @@ App.post(app, ~path="/connection", Controller.Users.connection);
 
 App.put(app, ~path="/users/:email", Controller.Users.update);
 
-//ASSIGNMENT REQUEST :
-//GET ALL WHICH ARE NOT PROCESSED
+
 App.get(app, ~path="/assignmentRequest", Controller.AssignmentRequest.getAll);
-//ADD
-// !!TODO!! : use the user email in the token to put in the assignment request
-App.post(app, ~path="/assignmentRequest", Controller.AssignmentRequest.create);
-//ACCEPT OR DECLINE AN ASSIGNMENT 
-// !!TODO!!
-App.get(app, ~path="/assignmentRequest/:id", Controller.AssignmentRequest.acceptOrDecline);
+App.get(app, ~path="/assignmentRequest/processed", Controller.AssignmentRequest.getAllWithProcessed(true));
+App.get(app, ~path="/assignmentRequest/notprocessed", Controller.AssignmentRequest.getAllWithProcessed(false));
+App.postWithMany(app, ~path="/assignmentRequest", [|Controller.authenticate, "Nouveau" |> Controller.permit,Controller.AssignmentRequest.create|]);
+//App.get(app, ~path="/assignmentRequest/:uuid", Controller.AssignmentRequest.acceptOrDecline);
 
 
 App.useOnPath(app, ~path="*", Controller.badRessource);

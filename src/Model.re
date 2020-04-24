@@ -1,3 +1,5 @@
+[@bs.module "uuid"] external uuidv4: unit => string = "v4";
+
 module User: {
   type t; // this is an abastraction to enforce creation with make functions
   let make: (string, string, string, string, string, string) => t;
@@ -10,6 +12,7 @@ module User: {
   let getUserRole: t => string;
   let isAdmin: t => bool;//allow to know if assignment request could be accepted by this user
   let fromJson: Js.Json.t => t;
+  let fromRequest: Express.Request.t => option(t);
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
   let toJsonWithoutPassword: t => Js.Json.t;
@@ -52,6 +55,22 @@ module User: {
       name: json |> field("name", string),
       surname: json |> field("surname", string),
       userRole: json |> field("userRole", string),
+    };
+
+    let fromRequest = req => {
+      switch (Js.Dict.get(Express.Request.asJsonObject(req), "user")) {
+        | None => None
+        | Some(user) => 
+          let o = user |> Js.Json.decodeObject 
+          switch (o){
+            | Some(o) => {
+              Js.Dict.set(o, "password", Js.Json.string(""))
+              let realUser = Js.Json.object_(o)
+              Some(realUser |> fromJson)
+            }
+            | None => None
+          }
+        };
     };
 
   let fromString = jsonString =>
@@ -121,8 +140,9 @@ module Users: {
 
 module AssignmentRequest: {
   type t; // this is an abastraction to enforce creation with make functions
-  let make: (int, string, string, bool, bool) => t;
-  let getAssignmentRequestId: t => int;
+  let make: (string, string, string, bool, bool) => t;
+  let makeNew: (string, string, bool, bool) => t;
+  let getAssignmentRequestId: t => string;
   let getEmailUserForAssignment: t => string;
   let getRoleRequest: t => string;
   let getDecision: t => bool;
@@ -133,7 +153,7 @@ module AssignmentRequest: {
   let toString: t => string;
 } = {
   type t = {
-    assignmentRequestId: int,
+    assignmentRequestId: string,
     emailUserForAssignment: string,
     roleRequest: string,
     decision: bool,
@@ -144,6 +164,8 @@ module AssignmentRequest: {
   let make = (assignmentRequestId, emailUserForAssignment, roleRequest, decision, processed) => {
     {assignmentRequestId, emailUserForAssignment, roleRequest, decision, processed}
   }
+
+  let makeNew = (emailUserForAssignment, roleRequest, decision, processed) => make(uuidv4(), emailUserForAssignment, roleRequest, decision, processed)
 
   // Getters are mandatory because of abstraction,
   // while it is a good practice for accessing records members, like for object members
@@ -158,7 +180,7 @@ module AssignmentRequest: {
   //let bool_of_int = value => value === 1;
   let fromJson = json =>
     Json.Decode.{
-      assignmentRequestId: json |> field("assignmentRequestId", int),
+      assignmentRequestId: json |> field("assignmentRequestId", string),
       emailUserForAssignment: json |> field("emailUserForAssignment", string),
       roleRequest: json |> field("roleRequest", string),
       decision: json |> field("decision", int) |> bool_of_int,
@@ -177,7 +199,7 @@ module AssignmentRequest: {
     // Use of bs-json to encode json in expressive way while you can use Js.Json / Js.Dict in an imperative way
     Json.Encode.(
       object_([
-        ("assignmentRequestId", int(assignmentrequest.assignmentRequestId)),
+        ("assignmentRequestId", string(assignmentrequest.assignmentRequestId)),
         ("emailUserForAssignment", string(assignmentrequest.emailUserForAssignment)),
         ("roleRequest", string(assignmentrequest.roleRequest)),
         ("decision", bool(assignmentrequest.decision)),
