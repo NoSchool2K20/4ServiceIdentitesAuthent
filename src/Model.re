@@ -148,6 +148,7 @@ module AssignmentRequest: {
   let getDecision: t => bool;
   let getProcessed: t => bool;
   let fromJson: Js.Json.t => t;
+  let fromJsonWithBoolean: Js.Json.t => t;
   let fromString: string => option(t);
   let toJson: t => Js.Json.t;
   let toString: t => string;
@@ -185,6 +186,15 @@ module AssignmentRequest: {
       roleRequest: json |> field("roleRequest", string),
       decision: json |> field("decision", int) |> bool_of_int,
       processed: json |> field("processed", int) |> bool_of_int,
+    };
+
+let fromJsonWithBoolean = json =>
+    Json.Decode.{
+      assignmentRequestId: json |> field("assignmentRequestId", string),
+      emailUserForAssignment: json |> field("emailUserForAssignment", string),
+      roleRequest: json |> field("roleRequest", string),
+      decision: json |> field("decision", bool),
+      processed: json |> field("processed", bool),
     };
 
   let fromString = jsonString =>

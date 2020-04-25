@@ -43,7 +43,8 @@ App.get(app, ~path="/assignmentRequest", Controller.AssignmentRequest.getAll);
 App.get(app, ~path="/assignmentRequest/processed", Controller.AssignmentRequest.getAllWithProcessed(true));
 App.get(app, ~path="/assignmentRequest/notprocessed", Controller.AssignmentRequest.getAllWithProcessed(false));
 App.postWithMany(app, ~path="/assignmentRequest", [|Controller.authenticate, "Nouveau" |> Controller.permit,Controller.AssignmentRequest.create|]);
-//App.get(app, ~path="/assignmentRequest/:uuid", Controller.AssignmentRequest.acceptOrDecline);
+App.postWithMany(app, ~path="/assignmentRequest/:uuid/accept", [|Controller.authenticate, "Administrateur" |> Controller.permit,true |> Controller.AssignmentRequest.acceptOrDecline|]);
+App.postWithMany(app, ~path="/assignmentRequest/:uuid/decline", [|Controller.authenticate, "Administrateur" |> Controller.permit,false |> Controller.AssignmentRequest.acceptOrDecline|]);
 
 
 App.useOnPath(app, ~path="*", Controller.badRessource);

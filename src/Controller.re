@@ -29,27 +29,17 @@ module AssignmentRequest = {
        );
 });
   };
-  /*
-  let acceptOrDecline =
-  PromiseMiddleware.from((_next, req, rep) =>
+  
+  let acceptOrDecline = choice => {
+  PromiseMiddleware.from((_next, req, rep) => 
     Js.Promise.(
       (
-        switch (Request.params(req)->Js.Dict.get("id")) {
-        | None => reject(Failure("INVALID id"))
-        | Some(id) =>
-          switch (Request.bodyJSON(req)) {
-          | None => reject(Failure("INVALID id"))
-          | Some(reqJson) =>
-            switch (
-              reqJson |> Json.Decode.(field("decision", optional(bool))),
-            ) {
-            | exception e => reject(e)
-            | (Some(decision)) =>
-              //if the decision is true, we update the role of the user concerning the id decision
-  
-              
-              //in both cases, update Processed (for TRUE) of the assignment request
-              | _ => reject(Failure("INVALID id"))
+        switch (Request.params(req)->Js.Dict.get("uuid")) {
+        | None => reject(Failure("INVALID uuid"))
+        | Some(uuid) => {
+            switch(uuid |> Js.Json.decodeString){
+              | Some(uuid) => DataAccess.AssignmentRequest.accept(uuid, choice)
+              | None => reject(Failure("INVALID uuid"))
             }
           }
         }
@@ -58,7 +48,7 @@ module AssignmentRequest = {
            rep
            |> Response.setHeader("Status", "201")
            |> Response.sendJson(
-                Json.Encode.(object_([("text", string("Updated user"))])),
+                Json.Encode.(object_([("text", string("Updated assignment"))])),
               )
            |> resolve
          })
@@ -81,7 +71,7 @@ module AssignmentRequest = {
          })
     )
   );
-  */
+        };
   
     let create =
     PromiseMiddleware.from((_next, req, rep) =>

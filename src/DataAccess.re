@@ -21,75 +21,6 @@ let knex = Knex.make(config);
 
 let algo = Password.Algorithm.Bcrypt;
 
-
-module AssignmentRequest = {
-  let create = (emailUserForAssignment,roleRequest) => {
-    let assignmentrequest = Model.AssignmentRequest.makeNew(emailUserForAssignment, roleRequest, false, false);
-    Js.Promise.(
-      knex
-      |> Knex.rawBinding(
-           "INSERT INTO assignmentrequest
-           (assignmentRequestId,emailUserForAssignment,roleRequest,decision,processed)
-            VALUES (?,?,?,?,?)",
-           (
-             Model.AssignmentRequest.getAssignmentRequestId(assignmentrequest),
-             Model.AssignmentRequest.getEmailUserForAssignment(assignmentrequest),
-             Model.AssignmentRequest.getRoleRequest(assignmentrequest),
-             Model.AssignmentRequest.getDecision(assignmentrequest),
-             Model.AssignmentRequest.getProcessed(assignmentrequest)
-           ),
-         )
-      |> Knex.toPromise
-      |> then_(_ => {resolve()})
-    );
-  };
-
-
-  let getAllWithProcessed = (processed) =>
-    Js.Promise.(
-      knex
-      |> Knex.fromTable("assignmentrequest")
-      |> Knex.where({"processed": processed})
-      |> Knex.toPromise
-      |> then_(results => {
-          Model.AssignmentRequests.fromJson(results)
-           |> List.map(assiR => {
-                Model.AssignmentRequest.make(
-                  Model.AssignmentRequest.getAssignmentRequestId(assiR),
-                  Model.AssignmentRequest.getEmailUserForAssignment(assiR),
-                  Model.AssignmentRequest.getRoleRequest(assiR),
-                  Model.AssignmentRequest.getDecision(assiR),
-                  Model.AssignmentRequest.getProcessed(assiR)
-                )
-              })
-           |> Model.AssignmentRequests.toJson
-           |> resolve
-        })
-  );
-
-  let getAll = () =>
-  Js.Promise.(
-    knex
-    |> Knex.fromTable("assignmentrequest")
-    |> Knex.toPromise
-    |> then_(results => {
-        Model.AssignmentRequests.fromJson(results)
-         |> List.map(assiR => {
-              Model.AssignmentRequest.make(
-                Model.AssignmentRequest.getAssignmentRequestId(assiR),
-                Model.AssignmentRequest.getEmailUserForAssignment(assiR),
-                Model.AssignmentRequest.getRoleRequest(assiR),
-                Model.AssignmentRequest.getDecision(assiR),
-                Model.AssignmentRequest.getProcessed(assiR)
-              )
-            })
-         |> Model.AssignmentRequests.toJson
-         |> resolve
-      })
-);
-
-};
-
 module Users = {
   let getAll = () =>
     Js.Promise.(
@@ -256,5 +187,133 @@ module Users = {
       Json_encode.bool(bool) |> resolve
     );
   };
+
+};
+
+module AssignmentRequest = {
+  let create = (emailUserForAssignment,roleRequest) => {
+    let assignmentrequest = Model.AssignmentRequest.makeNew(emailUserForAssignment, roleRequest, false, false);
+    Js.Promise.(
+      knex
+      |> Knex.rawBinding(
+           "INSERT INTO assignmentrequest
+           (assignmentRequestId,emailUserForAssignment,roleRequest,decision,processed)
+            VALUES (?,?,?,?,?)",
+           (
+             Model.AssignmentRequest.getAssignmentRequestId(assignmentrequest),
+             Model.AssignmentRequest.getEmailUserForAssignment(assignmentrequest),
+             Model.AssignmentRequest.getRoleRequest(assignmentrequest),
+             Model.AssignmentRequest.getDecision(assignmentrequest),
+             Model.AssignmentRequest.getProcessed(assignmentrequest)
+           ),
+         )
+      |> Knex.toPromise
+      |> then_(_ => {resolve()})
+    );
+  };
+
+
+  let getAllWithProcessed = (processed) =>
+    Js.Promise.(
+      knex
+      |> Knex.fromTable("assignmentrequest")
+      |> Knex.where({"processed": processed})
+      |> Knex.toPromise
+      |> then_(results => {
+          Model.AssignmentRequests.fromJson(results)
+           |> List.map(assiR => {
+                Model.AssignmentRequest.make(
+                  Model.AssignmentRequest.getAssignmentRequestId(assiR),
+                  Model.AssignmentRequest.getEmailUserForAssignment(assiR),
+                  Model.AssignmentRequest.getRoleRequest(assiR),
+                  Model.AssignmentRequest.getDecision(assiR),
+                  Model.AssignmentRequest.getProcessed(assiR)
+                )
+              })
+           |> Model.AssignmentRequests.toJson
+           |> resolve
+        })
+  );
+
+  let getAll = () =>
+  Js.Promise.(
+    knex
+    |> Knex.fromTable("assignmentrequest")
+    |> Knex.toPromise
+    |> then_(results => {
+        Model.AssignmentRequests.fromJson(results)
+         |> List.map(assiR => {
+              Model.AssignmentRequest.make(
+                Model.AssignmentRequest.getAssignmentRequestId(assiR),
+                Model.AssignmentRequest.getEmailUserForAssignment(assiR),
+                Model.AssignmentRequest.getRoleRequest(assiR),
+                Model.AssignmentRequest.getDecision(assiR),
+                Model.AssignmentRequest.getProcessed(assiR)
+              )
+            })
+         |> Model.AssignmentRequests.toJson
+         |> resolve
+      })
+);
+
+let getByUuid: string => Js.Promise.t(Js.Json.t) =
+    uuid =>
+      Js.Promise.(
+        knex
+        |> Knex.fromTable("assignmentrequest")
+        |> Knex.where({"assignmentRequestId": uuid})
+        |> Knex.toPromise
+        |> then_(result => {
+          Model.AssignmentRequests.fromJson(result)
+          |> List.hd
+          |> Model.AssignmentRequest.toJson
+          |> resolve
+          })
+      );
+
+let update = (assignmentRequestId, decision, processed) => {
+  let assign = Model.AssignmentRequest.make(assignmentRequestId,"","",decision,processed)
+  Js.Promise.(
+    knex
+    |> Knex.rawBinding(
+         "UPDATE assignmentrequest SET 
+         decision=?, 
+         processed=?
+         WHERE assignmentRequestId=? AND processed == false",
+         (
+          Model.AssignmentRequest.getDecision(assign),
+          Model.AssignmentRequest.getProcessed(assign),
+          Model.AssignmentRequest.getAssignmentRequestId(assign)
+         ),
+       )
+    |> Knex.toPromise
+    |> then_(_ => {resolve()})
+  );
+};
+
+let accept = (uuid, decision) => {
+  Js.Promise.(
+    uuid |> getByUuid
+    |> then_(assign => {
+      let assign = assign |> Model.AssignmentRequest.fromJsonWithBoolean
+      let id = assign |> Model.AssignmentRequest.getAssignmentRequestId
+      if(decision){
+          assign |> Model.AssignmentRequest.getEmailUserForAssignment |> Users.getByEmail
+          |> then_(user => {
+              let user = user |> Model.Users.fromJson |> List.hd
+              Users.update(
+                Model.User.getEmail(user),
+                Model.User.getPseudo(user),
+                Model.User.getPassword(user),
+                Model.User.getName(user),
+                Model.User.getSurname(user),
+                Model.AssignmentRequest.getRoleRequest(assign)
+              )
+          }) |> ignore
+      }
+      update(id, decision, true)
+    })
+  );
+}
 
 };

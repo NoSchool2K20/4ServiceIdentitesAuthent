@@ -64,3 +64,5 @@ CREATE TABLE assignmentrequest( --allows administrators to see request and to ac
    processed                    BOOLEAN DEFAULT FALSE, --to know if the decision is processed or not
    FOREIGN KEY(emailUserForAssignment) REFERENCES users(email)
 );
+
+INSERT INTO users VALUES("admin@test.com", "admin", "$2a$10$c9bsGLquFrqHm7BGvaA2u.K7p4/QsVWtc6zd7E0xdV4kwX1.1qqc.", "admin", "admin", "Administrateur");
