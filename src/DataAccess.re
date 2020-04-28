@@ -131,7 +131,7 @@ module Users = {
     Js.Promise.(
       userPromise
       |> then_(user => {
-      Knex.rawBinding(
+      let insert = Knex.rawBinding(
         "INSERT INTO users VALUES (?,?,?,?,?,?)",
         (
          Model.User.getEmail(user),
@@ -141,12 +141,12 @@ module Users = {
          Model.User.getSurname(user),
          Model.User.getUserRole(user),
         ), knex
-      ) |> Knex.toPromise |> resolve |> ignore
-        user |> resolve
+      ) |> Knex.toPromise
+        Js.Promise.all([|user |> resolve, insert|])
       }
       )
-      |> then_(user => {
-        AmqpSender.sendNewUser(Model.User.toJsonWithoutPassword(user)) |> ignore
+      |> then_( promises => {
+        AmqpSender.sendNewUser(Model.User.toJsonWithoutPassword(promises[0])) |> ignore
         resolve()
       })
       );

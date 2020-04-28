@@ -8,7 +8,7 @@ module AssignmentRequest = {
       |> Js.Promise.(
            then_(requests => {
              rep
-             |> Response.setHeader("Status", "200")
+             |> Response.status(Ok)
              |> Response.sendJson(requests)
              |> resolve
            })
@@ -22,7 +22,7 @@ module AssignmentRequest = {
     |> Js.Promise.(
          then_(requests => {
            rep
-           |> Response.setHeader("Status", "200")
+           |> Response.status(Ok)
            |> Response.sendJson(requests)
            |> resolve
          })
@@ -46,7 +46,7 @@ module AssignmentRequest = {
       )
       |> then_(() => {
            rep
-           |> Response.setHeader("Status", "201")
+           |> Response.status(Created)
            |> Response.sendJson(
                 Json.Encode.(object_([("text", string("Updated assignment"))])),
               )
@@ -56,7 +56,7 @@ module AssignmentRequest = {
            // Sadly no way to get Js.Promise.error message in a safe way
            Js.log(err);
            rep
-           |> Response.setHeader("Status", "400")
+           |> Response.status(BadRequest)
            |> Response.sendJson(
                 Json.Encode.(
                   object_([
@@ -101,7 +101,7 @@ module AssignmentRequest = {
         )
         |> then_(() => {
              rep
-             |> Response.setHeader("Status", "201")
+             |> Response.status(Created)
              |> Response.sendJson(
                   Json.Encode.(object_([("text", string("Created AR"))])),
                 )
@@ -111,7 +111,7 @@ module AssignmentRequest = {
              // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
              Js.log(err);
              rep
-             |> Response.setHeader("Status", "400")
+             |> Response.status(BadRequest)
              |> Response.sendJson(
                   Json.Encode.(
                     object_([
@@ -146,7 +146,7 @@ module Users = {
       |> Js.Promise.(
            then_(todoJson => {
              rep
-             |> Response.setHeader("Status", "200")
+             |> Response.status(Ok)
              |> Response.sendJson(todoJson)
              |> resolve
            })
@@ -164,7 +164,7 @@ module Users = {
         |> Js.Promise.(
              then_(todoJson => {
                rep
-               |> Response.setHeader("Status", "200")
+               |> Response.status(Ok)
                |> Response.sendJson(todoJson)
                |> resolve
              })
@@ -208,7 +208,7 @@ module Users = {
         )
         |> then_(() => {
              rep
-             |> Response.setHeader("Status", "201")
+             |> Response.status(Created)
              |> Response.sendJson(
                   Json.Encode.(object_([("text", string("Updated user"))])),
                 )
@@ -219,7 +219,7 @@ module Users = {
              Js.log(err);
 
              rep
-             |> Response.setHeader("Status", "400")
+             |> Response.status(BadRequest)
              |> Response.sendJson(
                   Json.Encode.(
                     object_([
@@ -255,7 +255,7 @@ module Users = {
       )
       |> then_(jwt => {
           rep
-          |> Response.setHeader("Status", "200")
+          |> Response.status(Ok)
           |> Response.sendJson(jwt)
           |> resolve
         })
@@ -263,7 +263,7 @@ module Users = {
           // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
           Js.log(err);
           rep
-          |> Response.setHeader("Status", "400")
+          |> Response.status(BadRequest)
           |> Response.sendJson(
                 Json.Encode.(
                   object_([
@@ -298,7 +298,7 @@ module Users = {
       )
       |> then_(isValid => {
           rep
-          |> Response.setHeader("Status", "200")
+          |> Response.status(Ok)
           |> Response.sendJson(isValid)
           |> resolve
         })
@@ -306,7 +306,7 @@ module Users = {
           // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
           Js.log(err);
           rep
-          |> Response.setHeader("Status", "400")
+          |> Response.status(BadRequest)
           |> Response.sendJson(
                 Json.Encode.(
                   object_([
@@ -345,7 +345,7 @@ module Users = {
       )
       |> then_(() => {
            rep
-           |> Response.setHeader("Status", "201")
+           |> Response.status(Created)
            |> Response.sendJson(
                 Json.Encode.(object_([("text", string("Created user"))])),
               )
@@ -355,7 +355,7 @@ module Users = {
            // Sadly no way to get Js.Promise.error is an abstract type, we have no way to get its message in a safe way
            Js.log(err);
            rep
-           |> Response.setHeader("Status", "400")
+           |> Response.status(BadRequest)
            |> Response.sendJson(
                 Json.Encode.(
                   object_([
@@ -398,7 +398,7 @@ let badRessource =
 
 
 let authenticate =
-Middleware.from((next, req) => {
+Middleware.from((next, req, res) => {
   switch (Request.get("authorization", req)) {
   | Some(token) => {
     let tokenWithoutBear = Js.String.split(" ", token)[1];
@@ -406,19 +406,54 @@ Middleware.from((next, req) => {
     if(bool){
       let payload = JsonWebToken.decode(tokenWithoutBear)
       Js.Dict.set(Request.asJsonObject(req), "user", payload)  
-      next(Next.middleware)
+      res |> next(Next.middleware)
     } else{
-      Response.sendStatus(Forbidden)
+      res |> Response.status(Forbidden) |> Response.sendJson(Json.Encode.(
+        object_([
+          (
+            "error",
+            string("INVALID JWT"),
+          ),
+        ])
+      ),
+      )
     }
   }
-  | None => Response.sendStatus(Unauthorized)
+  | None => res |> Response.status(Unauthorized) |> Response.sendJson(Json.Encode.(
+    object_([
+      (
+        "error",
+        string("NO JWT IN HEADER"),
+      ),
+    ])
+  ),
+  )
   };
 });
 
+let badPrivilegeError = res =>  res |> Response.status(Unauthorized) |> Response.sendJson(Json.Encode.(
+  object_([
+    (
+      "error",
+      string("CHECK YOUR PRIVILEGE"),
+    ),
+  ])
+),
+)
+
 let permit = (role : string) => {
-  Middleware.from((next, req) => {
+  Middleware.from((next, req, res) => {
+
   switch (Js.Dict.get(Request.asJsonObject(req), "user")) {
-  | None => Response.sendStatus(Unauthorized)
+  | None => res |> Response.status(Unauthorized) |> Response.sendJson(Json.Encode.(
+    object_([
+      (
+        "error",
+        string("BAD PAYLOAD IN JWT"),
+      ),
+    ])
+  ),
+  )
   | Some(user) =>
     switch (Js.Json.decodeObject(user)) {
     | Some(myUser) => {
@@ -427,18 +462,18 @@ let permit = (role : string) => {
           switch (Js.Json.decodeString(userRole)) {
             | Some(userRole) => {
               if(role == userRole){
-                next(Next.middleware)
+                res |> next(Next.middleware)
               } else {
-                Response.sendStatus(Unauthorized)
+                res |> badPrivilegeError
               }
             }
-            |None => Response.sendStatus(Unauthorized)
+            |None => res |> badPrivilegeError
           }
         }
-        | None =>  Response.sendStatus(Unauthorized)
+        | None =>  res |> badPrivilegeError
       }
     } 
-    | _ => Response.sendStatus(Unauthorized)
+    | _ => res |> badPrivilegeError
     }
   };
   });
