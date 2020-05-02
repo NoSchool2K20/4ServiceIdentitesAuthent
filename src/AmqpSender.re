@@ -1,6 +1,7 @@
 module Amqp = AmqpConnectionManager;
 
-let queue_name = "Qnewuser";
+let queue_name_user = "Qnewuser";
+let queue_name_assignment = "Qelevpriv";
 let amqp_u = "qzscetiz"
 let amqp_p = "iLJmX80CVSklfcVeS1NH81AwaHLSikPh"
 let amqp_host = "crow.rmq.cloudamqp.com"
@@ -59,4 +60,43 @@ let sendMessage = (queue_name, message) => {
      });
 };
 
-let sendNewUser = user => sendMessage(queue_name, user);
+let sendNewUser = message => sendMessage(queue_name_user, message);
+
+let sendAssignment = message => sendMessage(queue_name_assignment, message);
+
+let formatMessage = (emailReceiver, nameReceiver, subject, emailSender, nameSender, value) => {
+  Json.Encode.(
+    object_([
+      (
+        "personalizations",
+        jsonArray([|
+          object_([
+            (
+              "to",
+              jsonArray([|
+                object_([
+                  ("email", string(emailReceiver)),
+                  ("name", string(nameReceiver)),
+                ]),
+              |]),
+            ),
+            ("subject", string(subject)),
+          ]),
+        |]),
+      ),
+      (
+        "from",
+        object_([("email", string(emailSender)), ("name", string(nameSender))]),
+      ),
+      (
+        "content",
+        jsonArray([|
+          object_([
+            ("type", string("text/plain")),
+            ("value", string(value)),
+          ]),
+        |]),
+      ),
+    ])
+  );
+};

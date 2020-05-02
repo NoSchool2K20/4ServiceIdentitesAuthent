@@ -25,10 +25,11 @@ App.use(app, Controller.logRequest);
 
 // SETUP ROUTES
 // Example with welcome route
-App.getWithMany(app, ~path="/", [|Controller.authenticate, "Nouveau" |> Controller.permit, Controller.welcome|]);
+//App.getWithMany(app, ~path="/", [|Controller.authenticate, "Nouveau" |> Controller.permit, Controller.welcome|]);
+//App.get(app, ~path="/test", Controller.welcome);
 
-App.get(app, ~path="/users", Controller.Users.getAll);
-App.get(app, ~path="/users/:email", Controller.Users.get);
+//App.get(app, ~path="/users", Controller.Users.getAll);
+//App.get(app, ~path="/users/:email", Controller.Users.get);
 
 App.post(app, ~path="/verify", Controller.Users.verify);
 
@@ -36,12 +37,12 @@ App.post(app, ~path="/users", Controller.Users.create);
 
 App.post(app, ~path="/connection", Controller.Users.connection);
 
-App.put(app, ~path="/users/:email", Controller.Users.update);
+//App.put(app, ~path="/users/:email", Controller.Users.update);
 
 
-App.get(app, ~path="/assignmentRequest", Controller.AssignmentRequest.getAll);
-App.get(app, ~path="/assignmentRequest/processed", Controller.AssignmentRequest.getAllWithProcessed(true));
-App.get(app, ~path="/assignmentRequest/notprocessed", Controller.AssignmentRequest.getAllWithProcessed(false));
+App.getWithMany(app, ~path="/assignmentRequest", [|Controller.authenticate, "Administrateur" |> Controller.permit, Controller.AssignmentRequest.getAll|]);
+App.getWithMany(app, ~path="/assignmentRequest/processed", [|Controller.authenticate, "Administrateur" |> Controller.permit,true |> Controller.AssignmentRequest.getAllWithProcessed|]);
+App.getWithMany(app, ~path="/assignmentRequest/notprocessed", [|Controller.authenticate, "Administrateur" |> Controller.permit,false |> Controller.AssignmentRequest.getAllWithProcessed|]);
 App.postWithMany(app, ~path="/assignmentRequest", [|Controller.authenticate, "Nouveau" |> Controller.permit,Controller.AssignmentRequest.create|]);
 App.postWithMany(app, ~path="/assignmentRequest/:uuid/accept", [|Controller.authenticate, "Administrateur" |> Controller.permit,true |> Controller.AssignmentRequest.acceptOrDecline|]);
 App.postWithMany(app, ~path="/assignmentRequest/:uuid/decline", [|Controller.authenticate, "Administrateur" |> Controller.permit,false |> Controller.AssignmentRequest.acceptOrDecline|]);

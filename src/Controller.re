@@ -62,7 +62,7 @@ module AssignmentRequest = {
                   object_([
                     (
                       "error",
-                      string("INVALID REQUEST OR MISSING email FIELD"),
+                      string("INVALID REQUEST OR BAD UUID"),
                     ),
                   ])
                 ),
@@ -376,8 +376,7 @@ let welcome =
   Middleware.from((_next, _req) => {
     Json.Encode.(
       object_([("text", string("Welcome to Yet Another Api"))])
-    )
-    |> Response.sendJson
+    )|> Response.sendJson
   });
 
 let logRequest =

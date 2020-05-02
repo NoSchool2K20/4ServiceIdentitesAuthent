@@ -21,6 +21,9 @@ let knex = Knex.make(config);
 
 let algo = Password.Algorithm.Bcrypt;
 
+let adminBotEmail = "admin@noschool2k20.fr";
+let adminBotName = "NoReply NoSchool 2K20";
+
 module Users = {
   let getAll = () =>
     Js.Promise.(
@@ -142,11 +145,17 @@ module Users = {
          Model.User.getUserRole(user),
         ), knex
       ) |> Knex.toPromise
-        Js.Promise.all([|user |> resolve, insert|])
+        Js.Promise.all([|user |> Model.User.toJson |> resolve, getByUserRole("Administrateur"),  insert|])
       }
       )
       |> then_( promises => {
-        AmqpSender.sendNewUser(Model.User.toJsonWithoutPassword(promises[0])) |> ignore
+        let admin = promises[1] |> Model.Users.fromJson |> List.hd
+        let adminEmail = admin |> Model.User.getEmail
+        let adminName = Js.String.concatMany([|admin|> Model.User.getSurname, " ", admin|> Model.User.getName,|], "")
+        let subject = {js|Création de compte sur NoSchool|js}
+        let message = {js|Bonjour, votre compte est désormais actif. Vous pouvez dès a présent vous connecter sur notre site afin de profiter de votre abonnement.|js}
+        let payload = AmqpSender.formatMessage(adminEmail, adminName, subject, adminBotEmail, adminBotName, message)
+        AmqpSender.sendNewUser(payload) |> ignore
         resolve()
       })
       );
@@ -193,22 +202,32 @@ module Users = {
 module AssignmentRequest = {
   let create = (emailUserForAssignment,roleRequest) => {
     let assignmentrequest = Model.AssignmentRequest.makeNew(emailUserForAssignment, roleRequest, false, false);
+    let knexPromise = knex
+    |> Knex.rawBinding(
+         "INSERT INTO assignmentrequest
+         (assignmentRequestId,emailUserForAssignment,roleRequest,decision,processed)
+          VALUES (?,?,?,?,?)",
+         (
+           Model.AssignmentRequest.getAssignmentRequestId(assignmentrequest),
+           Model.AssignmentRequest.getEmailUserForAssignment(assignmentrequest),
+           Model.AssignmentRequest.getRoleRequest(assignmentrequest),
+           Model.AssignmentRequest.getDecision(assignmentrequest),
+           Model.AssignmentRequest.getProcessed(assignmentrequest)
+         ),
+       )
+    |> Knex.toPromise
     Js.Promise.(
-      knex
-      |> Knex.rawBinding(
-           "INSERT INTO assignmentrequest
-           (assignmentRequestId,emailUserForAssignment,roleRequest,decision,processed)
-            VALUES (?,?,?,?,?)",
-           (
-             Model.AssignmentRequest.getAssignmentRequestId(assignmentrequest),
-             Model.AssignmentRequest.getEmailUserForAssignment(assignmentrequest),
-             Model.AssignmentRequest.getRoleRequest(assignmentrequest),
-             Model.AssignmentRequest.getDecision(assignmentrequest),
-             Model.AssignmentRequest.getProcessed(assignmentrequest)
-           ),
-         )
-      |> Knex.toPromise
-      |> then_(_ => {resolve()})
+      Js.Promise.all([|Users.getByUserRole("Administrateur"),  knexPromise|])
+      |> then_(promises => {
+        let admin = promises[0] |> Model.Users.fromJson |> List.hd
+        let adminEmail = admin |> Model.User.getEmail
+        let adminName = Js.String.concatMany([|admin|> Model.User.getSurname, " ", admin|> Model.User.getName,|], "")
+        let subject = {js|Demande d'élévation de privilège|js}
+        let message = {js|Bonjour, votre demande à bien été pris en compte. Nous vous recontacterons dès que votre demande à été traité.|js}
+        let payload = AmqpSender.formatMessage(adminEmail, adminName, subject, adminBotEmail, adminBotName, message)
+        AmqpSender.sendAssignment(payload) |> ignore
+        resolve()
+      })
     );
   };
 
@@ -300,15 +319,27 @@ let accept = (uuid, decision) => {
       if(decision){
           assign |> Model.AssignmentRequest.getEmailUserForAssignment |> Users.getByEmail
           |> then_(user => {
-              let user = user |> Model.Users.fromJson |> List.hd
-              Users.update(
-                Model.User.getEmail(user),
-                Model.User.getPseudo(user),
-                Model.User.getPassword(user),
-                Model.User.getName(user),
-                Model.User.getSurname(user),
+              let userJson = user |> Model.Users.fromJson |> List.hd
+              let update = Users.update(
+                Model.User.getEmail(userJson),
+                Model.User.getPseudo(userJson),
+                Model.User.getPassword(userJson),
+                Model.User.getName(userJson),
+                Model.User.getSurname(userJson),
                 Model.AssignmentRequest.getRoleRequest(assign)
               )
+              Js.Promise.all2((user |> resolve, update))
+          })
+          |> then_(promises => {
+            let (user, _) = promises
+            let user = user |> Model.Users.fromJson |> List.hd
+            let userEmail = user |> Model.User.getEmail
+            let userName = Js.String.concatMany([|user|> Model.User.getSurname, " ", user|> Model.User.getName,|], "")
+            let subject = {js|Acceptation de votre demande d'élévation de privilège|js}
+            let message = {js|Bonjour, votre demande d'élévation de privilège à été validé. Vous pouvez dès a présent vous connecter pour utiliser vos nouveaux droits.|js}
+            let payload = AmqpSender.formatMessage(userEmail, userName, subject, adminBotEmail, adminBotName, message)
+            AmqpSender.sendAssignment(payload) |> ignore
+            resolve()
           }) |> ignore
       }
       update(id, decision, true)
