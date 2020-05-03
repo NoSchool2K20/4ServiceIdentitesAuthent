@@ -149,11 +149,13 @@ module Users = {
       }
       )
       |> then_( promises => {
+        let user = promises[0] |> Model.User.fromJson
         let admin = promises[1] |> Model.Users.fromJson |> List.hd
         let adminEmail = admin |> Model.User.getEmail
-        let adminName = Js.String.concatMany([|admin|> Model.User.getSurname, " ", admin|> Model.User.getName,|], "")
+        let adminName = Model.User.getSurname(admin) ++ " " ++ Model.User.getName(admin)
         let subject = {js|Création de compte sur NoSchool|js}
-        let message = {js|Bonjour, votre compte est désormais actif. Vous pouvez dès a présent vous connecter sur notre site afin de profiter de votre abonnement.|js}
+        let username = user |> Model.User.getPseudo
+        let message = "Bonjour, l'utilisateur " ++ username ++ " vient de s'abonner."
         let payload = AmqpSender.formatMessage(adminEmail, adminName, subject, adminBotEmail, adminBotName, message)
         AmqpSender.sendNewUser(payload) |> ignore
         resolve()
@@ -200,8 +202,8 @@ module Users = {
 };
 
 module AssignmentRequest = {
-  let create = (emailUserForAssignment,roleRequest) => {
-    let assignmentrequest = Model.AssignmentRequest.makeNew(emailUserForAssignment, roleRequest, false, false);
+  let create = (user,roleRequest) => {
+    let assignmentrequest = Model.AssignmentRequest.makeNew(user |> Model.User.getEmail, roleRequest, false, false);
     let knexPromise = knex
     |> Knex.rawBinding(
          "INSERT INTO assignmentrequest
@@ -221,9 +223,10 @@ module AssignmentRequest = {
       |> then_(promises => {
         let admin = promises[0] |> Model.Users.fromJson |> List.hd
         let adminEmail = admin |> Model.User.getEmail
-        let adminName = Js.String.concatMany([|admin|> Model.User.getSurname, " ", admin|> Model.User.getName,|], "")
+        let adminName = Model.User.getSurname(admin) ++ " " ++ Model.User.getName(admin)
         let subject = {js|Demande d'élévation de privilège|js}
-        let message = {js|Bonjour, votre demande à bien été pris en compte. Nous vous recontacterons dès que votre demande à été traité.|js}
+        let username = user |> Model.User.getPseudo
+        let message = "Bonjour, l'utilisateur " ++  username ++ {js| à demandé une élévation de privilèges.|js}
         let payload = AmqpSender.formatMessage(adminEmail, adminName, subject, adminBotEmail, adminBotName, message)
         AmqpSender.sendAssignment(payload) |> ignore
         resolve()
@@ -334,7 +337,7 @@ let accept = (uuid, decision) => {
             let (user, _) = promises
             let user = user |> Model.Users.fromJson |> List.hd
             let userEmail = user |> Model.User.getEmail
-            let userName = Js.String.concatMany([|user|> Model.User.getSurname, " ", user|> Model.User.getName,|], "")
+            let userName = Model.User.getSurname(user) ++ " " ++ Model.User.getName(user)
             let subject = {js|Acceptation de votre demande d'élévation de privilège|js}
             let message = {js|Bonjour, votre demande d'élévation de privilège à été validé. Vous pouvez dès a présent vous connecter pour utiliser vos nouveaux droits.|js}
             let payload = AmqpSender.formatMessage(userEmail, userName, subject, adminBotEmail, adminBotName, message)

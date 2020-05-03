@@ -88,7 +88,7 @@ module AssignmentRequest = {
                 switch (req |> Model.User.fromRequest){
                   | Some(user) => {
                     if(roleRequest == "Etudiant" || roleRequest == "Professeur"){
-                      DataAccess.AssignmentRequest.create(user |> Model.User.getEmail, roleRequest)
+                      DataAccess.AssignmentRequest.create(user, roleRequest)
                     } else {
                       reject(Failure("INVALID ROLE ASKED"))
                     }
