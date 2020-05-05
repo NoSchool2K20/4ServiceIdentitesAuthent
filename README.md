@@ -49,6 +49,11 @@ RabbitMQ
 - username: admin  
 - password: admin
 
+Un compte pour chaque rôle est aussi disponible:
+- Etudiant : etudiant@test.com/etudiant
+- Professeur : professeur@test.com/professeur
+- Nouveau : nouveau@test.com/nouveau
+
 ```
 CREATE TABLE users(
    email                   TEXT PRIMARY KEY  NOT NULL,

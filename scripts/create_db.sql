@@ -66,3 +66,6 @@ CREATE TABLE assignmentrequest( --allows administrators to see request and to ac
 );
 
 INSERT INTO users VALUES("admin@test.com", "admin", "$2a$10$c9bsGLquFrqHm7BGvaA2u.K7p4/QsVWtc6zd7E0xdV4kwX1.1qqc.", "admin", "admin", "Administrateur");
+INSERT INTO users VALUES("professeur@test.com", "professeur", "$2a$10$q8n5iEQqb70JlBV/PtB2f.W8GokBdiovodem6J0anAAyaZEIjO7pi", "professeur", "professeur", "Professeur");
+INSERT INTO users VALUES("etudiant@test.com", "etudiant", "$2a$10$cDnuSCta/oDupR6U.ojFPuQVRBrz8GLB8vson9Bvd0fz8u4qLYnPW", "etudiant", "etudiant", "Etudiant");
+INSERT INTO users VALUES("nouveau@test.com", "nouveau", "$2a$10$fTKPdOsB7PLwxtgTEpQKT.0T3YZY/7ULIL.LbrMydg1.8S7CEa9ji", "nouveau", "nouveau", "Nouveau");
