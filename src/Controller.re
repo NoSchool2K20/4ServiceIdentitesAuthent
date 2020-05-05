@@ -46,7 +46,7 @@ module AssignmentRequest = {
       )
       |> then_(() => {
            rep
-           |> Response.status(Created)
+           |> Response.status(Ok)
            |> Response.sendJson(
                 Json.Encode.(object_([("text", string("Updated assignment"))])),
               )

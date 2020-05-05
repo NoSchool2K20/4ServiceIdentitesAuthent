@@ -1,0 +1,1704 @@
+{
+	"info": {
+		"_postman_id": "ac3ab5a1-6738-4a97-bc92-12a276b99036",
+		"name": "NoSchool test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create an account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb602938-70e0-410e-a7a2-9f2b90813ac7",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"good return\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Created user\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"pseudo\": \"toood13\",\n        \"password\": \"toood\",\n        \"name\": \"AUGUET\",\n        \"surname\": \"Thomas\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/users",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an account KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c799a04c-3c22-49e7-8636-6ffde7c5f968",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"invalid return\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR MISSING email FIELD\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"toood@test.com\",\n        \"pseudo\": \"toood\",\n        \"password\": \"toood\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/users",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "connexion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2997594c-3112-45ba-8c65-d4f31cbd29d4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get jwt \", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.response.to.have.jsonBody(\"token\");",
+							"    pm.collectionVariables.set(\"token_user\", jsonData.token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"password\": \"toood\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/connection",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "connexion Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb2a97ed-326d-4ab6-bd72-2b4045a76506",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get jwt \", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.response.to.have.jsonBody(\"token\");",
+							"    pm.collectionVariables.set(\"token_admin\", jsonData.token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"admin@test.com\",\n        \"password\": \"admin\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/connection",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "connexion KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "098e1855-27ba-467d-943a-068e8020e6d1",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"invalid return\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"Connexion Ã©chouÃ©e\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"aya@test.com\",\n        \"password\": \"notgooddogo\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/connection",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "aac4d40b-0e77-4cea-bfe5-b3d3a939b29b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"token\": \"{{token_user}}\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/verify",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token return false bc bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4403ad1-6475-4455-9446-755cdff71a2f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"false\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"token\": \"bad token\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/verify",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ba42a460-d5c1-47ce-a1f9-4609f04f3236",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"dz\" : \"ze\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/verify",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c5fd12e2-a5ee-4937-83b3-46e01b25966b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"empty json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3aaac6f5-397c-450e-9293-e6d6a72b1f57",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "76d6db42-dade-44dd-b282-ed3c1ea17440",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dec3c649-3ae1-4cfd-8f32-38c2d9216993",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"it's working\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Created AR\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest one more",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fdd25141-b6f9-491a-8218-4937b22f4fbd",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"it's working\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Created AR\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO bad body (role asked)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "35b154af-b930-404f-aae0-4cb92e4edcb7",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad role asked\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR MISSING FIELDS\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"ed\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO no token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f1c0c70-5111-47a7-b996-9fa2e5532832",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "975cb62a-04f4-4fb3-bdae-4dfe809b8dba",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "my bad token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign not processed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0ebe397b-b840-4d7e-a363-b1ec63db33f6",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(2);",
+							"    pm.collectionVariables.set(\"assignmentRequestId_1\", jsonData[0].assignmentRequestId);",
+							"    pm.collectionVariables.set(\"assignmentRequestId_2\", jsonData[1].assignmentRequestId);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/notprocessed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign notprocessed KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a23883d-5e7f-4e95-b549-05ef7a8df553",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/notprocessed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign notprocessed KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "47294522-d6f8-46df-a440-a325be782fca",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/notprocessed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4f20da41-bb70-4187-a823-99a6e6a66783",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Updated assignment\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad uuid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "22e2380d-1d4d-44d6-8e2f-77f0588a53ac",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad uuid\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR BAD UUID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/dzdzdefefe/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"dzdzdefefe",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO no token in header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38a51cb1-2c30-47e5-b931-18f2b6eeec2c",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1a79c5ff-bce3-4f98-bc3e-f16300403c1e",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f3270afa-ad02-42aa-803f-96947ca7c686",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8d3d0d0-5ce0-4dc9-9f3f-ce434edb8064",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Updated assignment\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad uuid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "179b569b-7606-4ef1-aa90-78662aa12c38",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad uuid\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR BAD UUID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/dzdzdefefe/decline",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"dzdzdefefe",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO no token in header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "16a2e1f1-bb7b-4b52-9c0b-8dd9f2e622c3",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3ba09973-7477-43a0-8736-0b727f25cc4d",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a05cf74-300c-4cd1-b660-54513bd68daf",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign not processed equals zero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4a24c7fb-5803-4f7a-8598-3549b60a8c0d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/notprocessed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign processed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fe1a3b69-fcad-4314-ae36-10301f460a1e",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(2);",
+							"    pm.expect(jsonData[0].processed).to.eq(true);",
+							"    pm.expect(jsonData[1].processed).to.eq(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/processed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"processed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign KO no token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0bb7a752-d539-4f64-ba64-8f18a93102d6",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/processed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"processed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign processed KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b7a5dbea-69ad-406c-a739-845630aef9e4",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assignmentRequest/processed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assignmentRequest",
+						"processed"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "a5460a3d-0545-4309-9810-16d9a7c0e1e5",
+			"key": "token_user",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "14ad39c7-8327-41b9-aae0-1b36a38ec8ac",
+			"key": "token_admin",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "c1136861-98c0-43b7-936e-a9e44ae23a81",
+			"key": "assignmentRequestId_1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "34910278-07a0-4cbf-ac04-6aef941ec6a6",
+			"key": "assignmentRequestId_2",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
