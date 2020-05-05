@@ -29,8 +29,8 @@ token : pseudo, email
 
 
 */
-DROP TABLE assignmentrequest IF EXISTS;
-DROP TABLE users IF EXISTS;
+DROP TABLE IF EXISTS assignmentrequest;
+DROP TABLE IF EXISTS users;
 
 --Story 1 : En tant que « nouveau », je peux créer mon compte
 CREATE TABLE users( -- table of users in the application, the token is here for the security and manage the connection on the front
