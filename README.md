@@ -42,7 +42,12 @@ RabbitMQ
 
 ## Database :
 
-2 tables : users and assignmentrequest
+2 tables : users and assignmentrequest  
+
+1 compte admin par défaut (créé dans le fichier `scripts/create_db.sql`) avec en tant qu'identifiant de connexion:
+- email : admin@test.com
+- username: admin  
+- password: admin
 
 ```
 CREATE TABLE users(
