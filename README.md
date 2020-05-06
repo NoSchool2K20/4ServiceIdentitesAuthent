@@ -1,4 +1,4 @@
-# service des identités et des authentifications 
+# Service des identités et des authentifications 
 
 REST/JSON API built with ReasonML and compiled to JS with Buckelscript
 
