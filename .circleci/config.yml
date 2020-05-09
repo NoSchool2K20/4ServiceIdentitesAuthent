@@ -1,0 +1,42 @@
+version: 2.1
+orbs:
+  newman: postman/newman@0.0.2
+  node: circleci/node@1.1.6
+jobs:
+  build:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+  newman-collection-test:
+    executor: newman/postman-newman-docker
+    steps:
+      - checkout
+      - newman/newman-run:
+          collection: ./integrations/NoSchool_test.postman_collection.json
+  deploy:
+    executor:
+      name: node/default
+    steps:
+      - checkout      
+      - run:
+          name: clever deploy
+          command: |
+            git remote add clever https://$CLEVER_TOKEN:$CLEVER_SECRET@push-par-clevercloud-customers.services.clever-cloud.com/app_27ae2df1-e1e3-4f16-b8f8-49bbae2a4f9d.git
+            git push -u clever master
+workflows:
+    build_test_deploy:
+      jobs:
+        - build
+        - newman-collection-test:
+            requires:
+              - build
+        - deploy:
+            requires:
+              - newman-collection-test
+            filters:
+              branches:
+                only: master
