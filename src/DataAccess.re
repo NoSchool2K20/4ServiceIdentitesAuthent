@@ -181,7 +181,7 @@ module Users = {
                   | true => 
                   let options = Some({ ...JsonWebToken.emptyOptions, algorithm: HS256, expiresIn: "3 days"});
                   let myUser = users |> List.hd |> Model.User.toJsonWithoutPassword;
-                  let jwt = JsonWebToken.sign(~secret=`string(getenv("SECRET_TOKEN")), ~options, `json(myUser));
+                  let jwt = JsonWebToken.sign(~secret=`string(Sys.getenv("SECRET_TOKEN")), ~options, `json(myUser));
                   Json_encode.object_([("token", Json_encode.string(jwt))]) |> resolve
                   | false => raise(Not_found)
                 }
@@ -193,7 +193,7 @@ module Users = {
 
 
   let verify = token => {
-    let bool = JsonWebToken.verify(token,`string(getenv("SECRET_TOKEN"))) |> Belt.Result.isOk
+    let bool = JsonWebToken.verify(token,`string(Sys.getenv("SECRET_TOKEN"))) |> Belt.Result.isOk
     Js.Promise.(
       Json_encode.bool(bool) |> resolve
     );
