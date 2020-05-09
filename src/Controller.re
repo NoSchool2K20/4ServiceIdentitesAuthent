@@ -401,7 +401,7 @@ Middleware.from((next, req, res) => {
   switch (Request.get("authorization", req)) {
   | Some(token) => {
     let tokenWithoutBear = Js.String.split(" ", token)[1];
-    let bool = JsonWebToken.verify(tokenWithoutBear,"process.env.SECRET_TOKEN") |> Belt.Result.isOk
+    let bool = JsonWebToken.verify(tokenWithoutBear,`string(getenv("SECRET_TOKEN"))) |> Belt.Result.isOk
     if(bool){
       let payload = JsonWebToken.decode(tokenWithoutBear)
       Js.Dict.set(Request.asJsonObject(req), "user", payload)  
