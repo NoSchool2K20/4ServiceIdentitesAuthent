@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "fda7acd7-8301-400f-a685-04e5f1e3b47b",
 		"name": "Test",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
@@ -37,18 +37,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "https://noschool-authentication.cleverapps.io/users",
-					"protocol": "https",
-					"host": [
-						"noschool-authentication",
-						"cleverapps",
-						"io"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "https://noschool-authentication.cleverapps.io/users"
 			},
 			"response": []
 		},
@@ -78,25 +67,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"password\": \"toood\"\n      }",
+					"raw": "{\"email\":\"toood13@test.com\",\"password\":\"toood\"}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "https://noschool-authentication.cleverapps.io/connection",
-					"protocol": "https",
-					"host": [
-						"noschool-authentication",
-						"cleverapps",
-						"io"
-					],
-					"path": [
-						"connection"
-					]
-				}
+				"url": "https://noschool-authentication.cleverapps.io/connection"
 			},
 			"response": []
 		},
@@ -119,20 +97,14 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "google.com",
-					"host": [
-						"google",
-						"com"
-					]
-				}
+				"url": "google.com"
 			},
 			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "537276a7-ad26-4268-b73a-9985dcf715e2",
+			"id": "fc9f8287-7305-4411-8be9-ff1367cc2b4a",
 			"key": "token_user",
 			"value": "",
 			"type": "string"
