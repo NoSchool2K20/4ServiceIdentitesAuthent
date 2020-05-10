@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "fda7acd7-8301-400f-a685-04e5f1e3b47b",
-		"name": "Test",
+		"_postman_id": "02d73c82-3e9f-4db0-997c-3c5cd12bbc23",
+		"name": "NoSchool test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a0bf30ea-8eeb-40c7-bbe0-48a02d2d3c92",
+						"id": "dbc2f82e-bf14-4d85-9392-2569f26a12fa",
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -30,7 +30,54 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n\t\"email\": \"toood13@test.com\",\n\t\"pseudo\": \"toood13\",\n\t\"password\": \"toood\",\n\t\"name\": \"AUGUET\",\n\t\"surname\": \"Thomas\"\n}",
+					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"pseudo\": \"toood13\",\n        \"password\": \"toood\",\n        \"name\": \"AUGUET\",\n        \"surname\": \"Thomas\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/users",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an account KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "14bc6628-3648-4cf0-843c-f9e57b1cea84",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"invalid return\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR MISSING email FIELD\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"toood@test.com\",\n        \"pseudo\": \"toood\",\n        \"password\": \"toood\"\n      }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -58,7 +105,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "203d80bb-9017-4feb-9278-f8f090d8c885",
+						"id": "8a9e85b4-bc0e-4d6f-b256-4e16241232f3",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -78,7 +125,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n\t\"email\": \"toood13@test.com\",\n\t\"password\": \"toood\"\n}",
+					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"password\": \"toood\"\n      }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,15 +148,298 @@
 			"response": []
 		},
 		{
-			"name": "google.com",
+			"name": "connexion Admin",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "5a4af101-a92b-411c-b83a-1436e685f0a2",
+						"id": "3e916343-970a-44f6-91f0-0c02be7425df",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get jwt \", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.response.to.have.jsonBody(\"token\");",
+							"    pm.collectionVariables.set(\"token_admin\", jsonData.token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"admin@test.com\",\n        \"password\": \"admin\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/connection",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "connexion KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d091f4ad-b365-4a3a-8a4c-8579894172db",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"invalid return\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"Connexion Ã©chouÃ©e\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"email\": \"aya@test.com\",\n        \"password\": \"notgooddogo\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/connection",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6250e2b2-e9aa-4856-b48c-7f1cdc6a8310",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"true\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"token\": \"{{token_user}}\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/verify",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token return false bc bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44347a08-e510-4e31-9914-f8739fe86572",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"false\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"token\": \"bad token\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/verify",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify a token KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88726d92-6e23-464c-bdf6-26c15f389be7",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"dz\" : \"ze\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/verify",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d0b861fe-0081-4276-acc7-bc8ca8cc08ba",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"empty json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2f4409da-73c6-42cf-95c3-60d68dcc80b9",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -120,23 +450,105 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "google.com",
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
 					"host": [
-						"google",
-						"com"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Hello Word",
+			"name": "get all assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96215666-3405-4b09-9be4-b4e530a8a4f7",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3243a4d9-78ad-491a-baa1-3f32e0de0f87",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"it's working\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Created AR\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"message\": \"Hello, World!\"\n}",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -144,14 +556,1052 @@
 					}
 				},
 				"url": {
-					"raw": "https://postman-echo.com/post",
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
 					"protocol": "https",
 					"host": [
-						"postman-echo",
-						"com"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
 					"path": [
-						"post"
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest one more",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e58928a5-bb28-402e-b85a-56a4ac952ce4",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"it's working\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Created AR\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO bad body (role asked)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5f642b6-1697-419e-92d7-25ceb9fab6f4",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad role asked\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR MISSING FIELDS\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"ed\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO no token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b4df5d3-e121-44a6-842d-1842c353b5ec",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an assignmentRequest KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d318063-e047-4d13-b5d5-67661f4d5548",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "my bad token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n        \"roleRequest\": \"Professeur\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign not processed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "767aaa21-fb1f-4ded-93e7-42a1296d9801",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(2);",
+							"    pm.collectionVariables.set(\"assignmentRequestId_1\", jsonData[0].assignmentRequestId);",
+							"    pm.collectionVariables.set(\"assignmentRequestId_2\", jsonData[1].assignmentRequestId);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign notprocessed KO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "86624011-cd33-4bc4-877f-a11973e98c13",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign notprocessed KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d5e8a63d-2385-4bb7-9294-531255bff4ab",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70b21e0c-73d9-4a89-91b8-f337e6146c8e",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Updated assignment\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad uuid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "77c038b2-2d62-49b6-9534-38ceabf800c4",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad uuid\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR BAD UUID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/dzdzdefefe/accept",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"dzdzdefefe",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO no token in header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "563b35f6-8cbd-4b8b-a41c-64931fa8c521",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bbeb672e-5987-4e3d-9f84-f246a433d0f7",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "accept assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "11abaae0-df5b-48a9-91bf-9ba6bfac6561",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_1}}",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cacc2d83-2e4a-4ff6-b30a-3f234954dc57",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.text).to.eql(\"Updated assignment\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad uuid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8241295f-08a1-4d9f-8b67-8ffcc546ab7c",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"bad uuid\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID REQUEST OR BAD UUID\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/dzdzdefefe/decline",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"dzdzdefefe",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO no token in header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "aa4cdc08-70ad-4989-8c9e-5594ec1f244e",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e98297d4-329a-477d-a4e1-7e98d6963049",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decline assign KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33cb7f16-1c96-4781-a2f6-e8a63f6ed4af",
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"INVALID JWT\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "badtoken",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"{{assignmentRequestId_2}}",
+						"decline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign not processed equals zero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6150d3bd-51ea-4da6-9624-1320721e0cb0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"notprocessed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign processed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "992c7165-1a98-4d4d-8466-93973187c511",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"get results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eq(2);",
+							"    pm.expect(jsonData[0].processed).to.eq(true);",
+							"    pm.expect(jsonData[1].processed).to.eq(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"processed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign KO no token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "667f0dde-f4dd-4331-938c-da45cf7c35bb",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"no jwt header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"NO JWT IN HEADER\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"processed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all assign processed KO bad privilege",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e052d907-8108-4ec8-b821-6e1b705b0c3e",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"bad privilege\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"CHECK YOUR PRIVILEGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token_user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
+					"protocol": "https",
+					"host": [
+						"noschool-authentication",
+						"cleverapps",
+						"io"
+					],
+					"path": [
+						"assignmentRequest",
+						"processed"
 					]
 				}
 			},
@@ -160,8 +1610,26 @@
 	],
 	"variable": [
 		{
-			"id": "f9e185a4-0efe-4b09-8e67-62da01e796ee",
+			"id": "a5460a3d-0545-4309-9810-16d9a7c0e1e5",
 			"key": "token_user",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "14ad39c7-8327-41b9-aae0-1b36a38ec8ac",
+			"key": "token_admin",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "c1136861-98c0-43b7-936e-a9e44ae23a81",
+			"key": "assignmentRequestId_1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "34910278-07a0-4cbf-ac04-6aef941ec6a6",
+			"key": "assignmentRequestId_2",
 			"value": "",
 			"type": "string"
 		}
