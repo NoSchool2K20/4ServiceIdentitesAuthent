@@ -30,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n        \"email\": \"toood13@test.com\",\n        \"pseudo\": \"toood13\",\n        \"password\": \"toood\",\n        \"name\": \"AUGUET\",\n        \"surname\": \"Thomas\"\n      }",
+					"raw": "{ \n\t\"email\": \"toood13@test.com\",\n\t\"pseudo\": \"toood13\",\n\t\"password\": \"toood\",\n\t\"name\": \"AUGUET\",\n\t\"surname\": \"Thomas\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,7 +132,7 @@
 	],
 	"variable": [
 		{
-			"id": "c53d5d4f-1f02-4807-8c82-992a6dd5c6e4",
+			"id": "537276a7-ad26-4268-b73a-9985dcf715e2",
 			"key": "token_user",
 			"value": "",
 			"type": "string"
