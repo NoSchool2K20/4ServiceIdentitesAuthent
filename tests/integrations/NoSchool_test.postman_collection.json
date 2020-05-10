@@ -99,11 +99,40 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "google.com",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a4af101-a92b-411c-b83a-1436e685f0a2",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "google.com",
+					"host": [
+						"google",
+						"com"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "61b4f38a-e566-46ea-9f75-d217cbf68ed4",
+			"id": "c53d5d4f-1f02-4807-8c82-992a6dd5c6e4",
 			"key": "token_user",
 			"value": "",
 			"type": "string"
