@@ -12,7 +12,7 @@ let onListen = e =>
     )
     |> Logger.error;
     Node.Process.exit(1);
-  | _ => "Listening at http://127.0.0.1:8080" |> Logger.info
+  | _ => "Listening at http://127.0.0.1:8080" |> Logger.debug
   };
 
 let server = Express.App.listen(Api.app, ~port=8080, ~onListen, ());
