@@ -10,7 +10,7 @@
     "bsb:clean": "bsb -clean-world",
     "build": "npm run bsb:build",
     "server": "LEVEL=debug nodemon src/Index.bs.js",
-    "start": "node src/Index.bs.js",
+    "start": "npm run db:create && npm run build && node src/Index.bs.js",
     "db:create": "cat scripts/create_db.sql | sqlite3 ./database/yatdb.sqlite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
