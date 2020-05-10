@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - newman/newman-run:
-          collection: ./tests/integrations/NoSchool_test.postman_collection.json
+          collection: ./tests/integrations/NoSchool_test_circleci.postman_collection.json
   deploy:
     executor:
       name: node/default
