@@ -17,6 +17,7 @@ jobs:
       - checkout
       - newman/newman-run:
           collection: ./tests/integrations/NoSchool_test.postman_collection.json
+          additional-options: -r cli
   deploy:
     executor:
       name: node/default
