@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ac3ab5a1-6738-4a97-bc92-12a276b99036",
+		"_postman_id": "a6a87a4e-ec7e-48ef-b857-ebf9d7596c4c",
 		"name": "NoSchool test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bb602938-70e0-410e-a7a2-9f2b90813ac7",
+						"id": "39aec740-8c6b-482c-beb0-b29ce0042df1",
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -39,14 +39,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/users",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"users"
 					]
@@ -60,7 +58,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c799a04c-3c22-49e7-8636-6ffde7c5f968",
+						"id": "ff7f2e3d-a648-4b21-a5ee-718f5f208178",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -88,14 +86,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/users",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"users"
 					]
@@ -109,7 +105,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "2997594c-3112-45ba-8c65-d4f31cbd29d4",
+						"id": "569e77cc-8a8f-46f9-a900-12d456a9fe97",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -138,14 +134,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/connection",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"connection"
 					]
@@ -159,7 +153,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bb2a97ed-326d-4ab6-bd72-2b4045a76506",
+						"id": "5e45fc12-71e3-4496-a9f3-68e2fa6c6b99",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -188,14 +182,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/connection",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"connection"
 					]
@@ -209,7 +201,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "098e1855-27ba-467d-943a-068e8020e6d1",
+						"id": "84ae3476-920e-44f0-ac21-bd805a4db0d0",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -237,14 +229,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/connection",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"connection"
 					]
@@ -258,7 +248,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "aac4d40b-0e77-4cea-bfe5-b3d3a939b29b",
+						"id": "3df668e5-974d-4dba-a8f2-a0a9945adc73",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -285,14 +275,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/verify",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"verify"
 					]
@@ -306,7 +294,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a4403ad1-6475-4455-9446-755cdff71a2f",
+						"id": "5a0507a0-9268-4d3b-a13f-0631a4e11ce9",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -333,14 +321,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/verify",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"verify"
 					]
@@ -354,7 +340,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "ba42a460-d5c1-47ce-a1f9-4609f04f3236",
+						"id": "29da16f1-124c-4d1c-96f7-7b482ea40a97",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -378,14 +364,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/verify",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"verify"
 					]
@@ -399,7 +383,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c5fd12e2-a5ee-4937-83b3-46e01b25966b",
+						"id": "88914834-88f1-4f9d-9ef0-293f5a87346d",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -428,14 +412,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -449,7 +431,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3aaac6f5-397c-450e-9293-e6d6a72b1f57",
+						"id": "8d161e66-decb-4e85-bd36-c8b93784d3ba",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -469,14 +451,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -490,7 +470,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "76d6db42-dade-44dd-b282-ed3c1ea17440",
+						"id": "86583da4-7e25-4a46-affb-ae7f0098df30",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -520,14 +500,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -541,7 +519,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "dec3c649-3ae1-4cfd-8f32-38c2d9216993",
+						"id": "e6f1388b-881f-4539-8ae6-b7399698eaf4",
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -579,14 +557,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -600,7 +576,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fdd25141-b6f9-491a-8218-4937b22f4fbd",
+						"id": "a4230271-8b7b-4d77-b002-388b33f5f88f",
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -638,14 +614,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -659,7 +633,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "35b154af-b930-404f-aae0-4cb92e4edcb7",
+						"id": "0086fb32-243b-4750-8491-0583b8d5367e",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -697,14 +671,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -718,7 +690,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3f1c0c70-5111-47a7-b996-9fa2e5532832",
+						"id": "ac43c2ad-0e3d-46f4-af9c-326f198d082e",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -747,14 +719,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -768,7 +738,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "975cb62a-04f4-4fb3-bdae-4dfe809b8dba",
+						"id": "94fd18fe-9cf8-43b5-a462-421b9dfca48a",
 						"exec": [
 							"pm.test(\"Status code is 403\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -807,14 +777,12 @@
 				},
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest"
 					]
@@ -828,7 +796,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0ebe397b-b840-4d7e-a363-b1ec63db33f6",
+						"id": "9e631907-4a41-4895-a029-e352e5fa7a3c",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -859,14 +827,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"notprocessed"
@@ -881,7 +847,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5a23883d-5e7f-4e95-b549-05ef7a8df553",
+						"id": "e125b044-27ba-4b49-a563-b561fe7f3c02",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -901,14 +867,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"notprocessed"
@@ -923,7 +887,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "47294522-d6f8-46df-a440-a325be782fca",
+						"id": "ad15fdf3-95a1-4374-a9c1-7a46a8d3a1c5",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -953,14 +917,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"notprocessed"
@@ -975,7 +937,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4f20da41-bb70-4187-a823-99a6e6a66783",
+						"id": "819a81e7-874a-4599-96c6-bf8876a7be27",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -1004,14 +966,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_1}}",
@@ -1027,7 +987,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "22e2380d-1d4d-44d6-8e2f-77f0588a53ac",
+						"id": "02ad38a2-0915-488c-b237-cc2220ee2336",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -1056,14 +1016,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/dzdzdefefe/accept",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"dzdzdefefe",
@@ -1079,7 +1037,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "38a51cb1-2c30-47e5-b931-18f2b6eeec2c",
+						"id": "eeb63f1d-d6f6-41fa-a36a-f7fc85e1f61d",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -1099,14 +1057,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_1}}",
@@ -1122,7 +1078,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1a79c5ff-bce3-4f98-bc3e-f16300403c1e",
+						"id": "b6000be9-2b78-4085-8751-fcbc497757ed",
 						"exec": [
 							"pm.test(\"Status code is 403\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -1152,14 +1108,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_1}}",
@@ -1175,7 +1129,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f3270afa-ad02-42aa-803f-96947ca7c686",
+						"id": "0c0b8186-ec80-4fdf-8f1e-f4efb8d0a2fc",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -1205,14 +1159,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_1}}/accept",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_1}}",
@@ -1228,7 +1180,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e8d3d0d0-5ce0-4dc9-9f3f-ce434edb8064",
+						"id": "baea19f9-20b5-40de-9f37-8aebaaa5397b",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -1257,14 +1209,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_2}}",
@@ -1280,7 +1230,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "179b569b-7606-4ef1-aa90-78662aa12c38",
+						"id": "3409d37d-29d1-4424-ac39-9050268aae1a",
 						"exec": [
 							"pm.test(\"Status code is 400\", function () {",
 							"    pm.response.to.have.status(400);",
@@ -1309,14 +1259,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/dzdzdefefe/decline",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"dzdzdefefe",
@@ -1332,7 +1280,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "16a2e1f1-bb7b-4b52-9c0b-8dd9f2e622c3",
+						"id": "ec561be8-059c-4a26-8a67-db49f21074b8",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -1352,14 +1300,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_2}}",
@@ -1375,7 +1321,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3ba09973-7477-43a0-8736-0b727f25cc4d",
+						"id": "1e21eef5-6378-487b-8451-84454313b899",
 						"exec": [
 							"pm.test(\"Status code is 403\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -1405,14 +1351,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_2}}",
@@ -1428,7 +1372,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5a05cf74-300c-4cd1-b660-54513bd68daf",
+						"id": "f9d4937f-b4b6-4ca5-841e-e4edf1f61249",
 						"exec": [
 							"pm.test(\"Status code is 403\", function () {",
 							"    pm.response.to.have.status(403);",
@@ -1458,14 +1402,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/{{assignmentRequestId_2}}/decline",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"{{assignmentRequestId_2}}",
@@ -1481,7 +1423,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4a24c7fb-5803-4f7a-8598-3549b60a8c0d",
+						"id": "5c20590b-e3a8-43d3-a258-8dc7d9f7e208",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -1510,14 +1452,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/notprocessed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"notprocessed"
@@ -1532,7 +1472,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fe1a3b69-fcad-4314-ae36-10301f460a1e",
+						"id": "7c2ee0dc-62de-427e-96d8-892a5885a158",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -1563,14 +1503,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"processed"
@@ -1585,7 +1523,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0bb7a752-d539-4f64-ba64-8f18a93102d6",
+						"id": "d286fd2e-1262-4315-a0a1-efd49d24e4d5",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -1605,14 +1543,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"processed"
@@ -1627,7 +1563,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "b7a5dbea-69ad-406c-a739-845630aef9e4",
+						"id": "725d87c6-2712-4d56-8292-44df44026642",
 						"exec": [
 							"pm.test(\"Status code is 401\", function () {",
 							"    pm.response.to.have.status(401);",
@@ -1657,14 +1593,12 @@
 				"header": [],
 				"url": {
 					"raw": "https://noschool-authentication.cleverapps.io/assignmentRequest/processed",
-					"protocol": "http",
+					"protocol": "https",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"noschool-authentication",
+						"cleverapps",
+						"io"
 					],
-					"port": "8080",
 					"path": [
 						"assignmentRequest",
 						"processed"
@@ -1676,25 +1610,25 @@
 	],
 	"variable": [
 		{
-			"id": "a5460a3d-0545-4309-9810-16d9a7c0e1e5",
+			"id": "be6e1f8b-dc5c-4c1b-9350-1eaefa1aea1c",
 			"key": "token_user",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "14ad39c7-8327-41b9-aae0-1b36a38ec8ac",
+			"id": "fedaf43e-7103-4307-9b3a-8c2d440fef1a",
 			"key": "token_admin",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "c1136861-98c0-43b7-936e-a9e44ae23a81",
+			"id": "484e9d2d-ec25-465b-bcbd-32a1e5371f79",
 			"key": "assignmentRequestId_1",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "34910278-07a0-4cbf-ac04-6aef941ec6a6",
+			"id": "5182b311-d531-41ba-bdd2-adc5082dac1e",
 			"key": "assignmentRequestId_2",
 			"value": "",
 			"type": "string"
